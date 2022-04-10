@@ -1,7 +1,7 @@
 local consts = {}
 
-consts.title = "Survival Kids Clone"
-consts.identity = "survivalkidsclone"
+consts.title = "Unnnnamed RPG"
+consts.identity = "unnnnamedrpg"
 
 consts.contentWidth = 160
 consts.contentHeight = 144
