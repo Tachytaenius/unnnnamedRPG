@@ -70,6 +70,12 @@ function love.draw(lerpI)
 			x, y = math.floor(x), math.floor(y) -- stop bleeding
 			love.graphics.draw(image, quad, x, y)
 		end
+		
+		for x = 0, world.tileMapWidth - 1 do
+			for y = 0, world.tileMapHeight - 1 do
+				love.graphics.draw(assets.tileTypes[world.foregroundTiles[x][y].name], x * consts.tileSize, y * consts.tileSize)
+			end
+		end
 	end
 	love.graphics.origin()
 	love.graphics.setCanvas()
