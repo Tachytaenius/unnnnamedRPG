@@ -1,3 +1,6 @@
 nothing
 grass
 tree
+floweredGrass
+pebbledGrass
+treeStump
