@@ -8,7 +8,7 @@ local util = require("util")
 local csvToBin = require("util.csvToBin")
 
 local function loadMap(path)
-	path = "assets/levels/" .. path .. "/"
+	path = "assets/scenes/" .. path .. "/"
 	local world, player, camera
 	world = {}
 	
