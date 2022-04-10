@@ -44,25 +44,36 @@ end
 function love.draw(lerpI)
 	lerpI = 1
 	love.graphics.setCanvas(contentCanvas)
-	for x = 0, world.tileMapWidth - 1 do
-		for y = 0, world.tileMapHeight - 1 do
-			love.graphics.draw(assets.tileTypes[world.backgroundTiles[x][y].name], x * consts.tileSize, y * consts.tileSize)
+	love.graphics.clear()
+	local cw, ch = contentCanvas:getDimensions()
+	if camera then
+		local camX, camY = math.lerp(camera.prev.drawX, camera.drawX, lerpI), math.lerp(camera.prev.drawY, camera.drawY, lerpI)
+		camX, camY = camX * consts.tileSize, camY * consts.tileSize
+		camX, camY = math.floor(camX), math.floor(camY)
+		love.graphics.translate(-camX, -camY)
+		love.graphics.translate(cw / 2, ch / 2)
+		
+		for x = 0, world.tileMapWidth - 1 do
+			for y = 0, world.tileMapHeight - 1 do
+				love.graphics.draw(assets.tileTypes[world.backgroundTiles[x][y].name], x * consts.tileSize, y * consts.tileSize)
+			end
+		end
+		
+		for entity in world.entities:elements() do
+			local quad = util.getEntityQuad(entity, entity.asset.info.defaultSpritesheetName)
+			local spritesheetName = entity.asset.info.defaultSpritesheetName
+			local image = entity.asset[spritesheetName]
+			local x, y = math.lerp(entity.prev.drawX, entity.drawX, lerpI), math.lerp(entity.prev.drawY, entity.drawY, lerpI)
+			x, y = x * consts.tileSize, y * consts.tileSize
+			x = x + consts.tileSize / 2 - entity.asset.info.spritesheetInfo[spritesheetName].width / 2
+			y = y + consts.tileSize / 2 - entity.asset.info.spritesheetInfo[spritesheetName].height / 2
+			x, y = math.floor(x), math.floor(y) -- stop bleeding
+			love.graphics.draw(image, quad, x, y)
 		end
 	end
-	for entity in world.entities:elements() do
-		local quad = util.getEntityQuad(entity, entity.asset.info.defaultSpritesheetName)
-		local spritesheetName = entity.asset.info.defaultSpritesheetName
-		local image = entity.asset[spritesheetName]
-		local x, y = math.lerp(entity.prev.drawX, entity.drawX, lerpI), math.lerp(entity.prev.drawY, entity.drawY, lerpI)
-		x, y = x * consts.tileSize, y * consts.tileSize
-		x = x + consts.tileSize / 2 - entity.asset.info.spritesheetInfo[spritesheetName].width / 2
-		y = y + consts.tileSize / 2 - entity.asset.info.spritesheetInfo[spritesheetName].height / 2
-		x, y = math.floor(x), math.floor(y) -- stop bleeding
-		love.graphics.draw(image, quad, x, y)
-	end
+	love.graphics.origin()
 	love.graphics.setCanvas()
 	local ww, wh = love.graphics.getDimensions()
-	local cw, ch = contentCanvas:getDimensions()
 	local scale = consts.contentScale -- TEMP
 	cw, ch = cw * scale, ch * scale
 	love.graphics.draw(contentCanvas, (ww - cw) / 2, (wh - ch) / 2, 0, scale)
