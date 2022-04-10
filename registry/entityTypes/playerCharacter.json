@@ -1,0 +1,6 @@
+{
+	"moveTime": 0.35,
+	"walkCycleTime": 0.7,
+	"dontResetWalkCyclePos": true,
+	"alternateWalkCycleStartPos": true
+}
