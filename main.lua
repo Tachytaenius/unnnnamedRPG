@@ -42,6 +42,7 @@ function love.load(args)
 end
 
 function love.draw(lerpI)
+	lerpI = 1
 	love.graphics.setCanvas(contentCanvas)
 	for x = 0, world.tileMapWidth - 1 do
 		for y = 0, world.tileMapHeight - 1 do
