@@ -136,25 +136,25 @@ function love.update(dt)
 	if commandDone.previousDisplay then
 		local prevDisplayNumber = settings.graphics.displayNumber
 		settings.graphics.displayNumber = (settings.graphics.displayNumber - 1) % love.window.getDisplayCount()
-		recreateWindow = prevDisplayNumber ~= settings.graphics.displayNumber
+		recreateWindow = recreateWindow or prevDisplayNumber ~= settings.graphics.displayNumber
 	end
 	if commandDone.nextDisplay then
 		local prevDisplayNumber = settings.graphics.displayNumber
 		settings.graphics.displayNumber = (settings.graphics.displayNumber + 1) % love.window.getDisplayCount()
-		recreateWindow = prevDisplayNumber ~= settings.graphics.displayNumber
+		recreateWindow = recreateWindow or prevDisplayNumber ~= settings.graphics.displayNumber
 	end
 	if commandDone.toggleFullscreen then
 		settings.graphics.fullscreen = not settings.graphics.fullscreen
-		recreateWindow = true
+		recreateWindow = recreateWindow or true
 	end
 	if commandDone.scaleDown then
 		local prevScale = settings.graphics.contentScale
 		settings.graphics.contentScale = math.max(1, settings.graphics.contentScale - 1)
-		recreateWindow = not settings.graphics.fullscreen and prevScale ~= settings.graphics.contentScale
+		recreateWindow = recreateWindow or not settings.graphics.fullscreen and prevScale ~= settings.graphics.contentScale
 	end
 	if commandDone.scaleUp then
 		settings.graphics.contentScale = settings.graphics.contentScale + 1
-		recreateWindow = not settings.graphics.fullscreen
+		recreateWindow = recreateWindow or not settings.graphics.fullscreen
 	end
 	if recreateWindow then
 		util.recreateWindow()
