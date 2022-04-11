@@ -168,7 +168,7 @@ function love.update(dt)
 	end
 	
 	-- Actual content update
-	util.updateEntities(world, player)
+	util.updateEntities(world, player, dt, commandDone)
 	animatedTiles:update(dt)
 	
 	commandDone = {}

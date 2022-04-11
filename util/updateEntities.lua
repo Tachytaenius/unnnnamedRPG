@@ -1,4 +1,6 @@
-local function updateEntities(world, player)
+local util = require("util")
+
+local function updateEntities(world, player, dt, commandDone)
 	for entity in world.entities:elements() do
 		local entityType = entity.type
 		entity.prev = setmetatable({}, getmetatable(entity.prev) or {__index = entity})
@@ -40,28 +42,55 @@ local function updateEntities(world, player)
 				end
 			end
 			if up then
+				if entity.direction ~= "up" then
+					entity.turnMovementDelayTimer = entity.type.turnMovementDelay
+				end
 				entity.direction = "up"
-				if not util.checkCollision(world, entity.x, entity.y - 1) then
-					entity.moveDirection = "up"
+				if not entity.turnMovementDelayTimer then
+					if not util.checkCollision(world, entity.x, entity.y - 1) then
+						entity.moveDirection = "up"
+					end
 				end
 			elseif down then
+				if entity.direction ~= "down" then
+					entity.turnMovementDelayTimer = entity.type.turnMovementDelay
+				end
 				entity.direction = "down"
-				if not util.checkCollision(world, entity.x, entity.y + 1) then
-					entity.moveDirection = "down"
+				if not entity.turnMovementDelayTimer then
+					if not util.checkCollision(world, entity.x, entity.y + 1) then
+						entity.moveDirection = "down"
+					end
 				end
 			elseif left then
+				if entity.direction ~= "left" then
+					entity.turnMovementDelayTimer = entity.type.turnMovementDelay
+				end
 				entity.direction = "left"
-				if not util.checkCollision(world, entity.x - 1, entity.y) then
-					entity.moveDirection = "left"
+				if not entity.turnMovementDelayTimer then
+					if not util.checkCollision(world, entity.x - 1, entity.y) then
+						entity.moveDirection = "left"
+					end
 				end
 			elseif right then
+				if entity.direction ~= "right" then
+					entity.turnMovementDelayTimer = entity.type.turnMovementDelay
+				end
 				entity.direction = "right"
-				if not util.checkCollision(world, entity.x + 1, entity.y) then
-					entity.moveDirection = "right"
+				if not entity.turnMovementDelayTimer then
+					if not util.checkCollision(world, entity.x + 1, entity.y) then
+						entity.moveDirection = "right"
+					end
 				end
 			end
 			if entity.moveDirection then
 				entity.moveProgress = 0
+			end
+		end
+		-- timers
+		if entity.turnMovementDelayTimer then
+			entity.turnMovementDelayTimer = entity.turnMovementDelayTimer - dt
+			if entity.turnMovementDelayTimer <= 0 then
+				entity.turnMovementDelayTimer = nil
 			end
 		end
 		-- do walk cycle
