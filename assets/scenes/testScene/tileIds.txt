@@ -4,3 +4,6 @@ tree
 floweredGrass
 pebbledGrass
 treeStump
+woodenPlanks
+woodenWallFront
+woodenWallTopOnly
