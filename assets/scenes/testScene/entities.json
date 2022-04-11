@@ -1,5 +1,8 @@
 [
 	{"x": 4, "y": 4, "player": true, "camera": true, "typeName": "playerCharacter", "direction": "down"},
-	{"x": 2, "y": 3, "typeName": "woodenChair", "direction": "up"},
+	{"x": 2, "y": 2, "typeName": "woodenChair", "direction": "down"},
+	{"x": 3, "y": 3, "typeName": "woodenChair", "direction": "left"},
+	{"x": 2, "y": 4, "typeName": "woodenChair", "direction": "up"},
+	{"x": 2, "y": 3, "typeName": "woodenTable"},
 	{"x": 4, "y": 6, "typeName": "woodenDoor"}
 ]
