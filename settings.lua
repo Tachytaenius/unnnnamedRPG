@@ -1,3 +1,6 @@
+-- TODO: json
+-- TODO: gui
+
 local settings = {}
 
 settings.graphics = {}
@@ -12,6 +15,9 @@ settings.commands.up = "w"
 settings.commands.down = "s"
 settings.commands.left = "a"
 settings.commands.right = "d"
+settings.commands.interact = "l"
+settings.commands.confirm = "l"
+settings.commands.cancel = "k"
 settings.commands.previousDisplay = "f7"
 settings.commands.nextDisplay = "f8"
 settings.commands.scaleDown = "f9"

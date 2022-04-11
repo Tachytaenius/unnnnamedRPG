@@ -59,7 +59,14 @@ function love.draw(lerpI)
 			end
 		end
 		
+		local entityDrawOrder = {}
 		for entity in world.entities:elements() do
+			entityDrawOrder[#entityDrawOrder+1] = entity
+		end
+		table.sort(entityDrawOrder, function(a, b)
+			return consts.entityLayerIndicesByName[a.type.layer] < consts.entityLayerIndicesByName[b.type.layer]
+		end)
+		for _, entity in ipairs(entityDrawOrder) do
 			local spritesheetName = util.getEntitySpritesheetName(entity)
 			local quad = util.getEntityQuad(entity, spritesheetName)
 			local image = entity.asset[spritesheetName]
@@ -203,22 +210,22 @@ function love.update(dt)
 			end
 			if up then
 				entity.direction = "up"
-				if not util.isOccupied(world, entity.x, entity.y - 1) then
+				if not util.checkCollision(world, entity.x, entity.y - 1) then
 					entity.moveDirection = "up"
 				end
 			elseif down then
 				entity.direction = "down"
-				if not util.isOccupied(world, entity.x, entity.y + 1) then
+				if not util.checkCollision(world, entity.x, entity.y + 1) then
 					entity.moveDirection = "down"
 				end
 			elseif left then
 				entity.direction = "left"
-				if not util.isOccupied(world, entity.x - 1, entity.y) then
+				if not util.checkCollision(world, entity.x - 1, entity.y) then
 					entity.moveDirection = "left"
 				end
 			elseif right then
 				entity.direction = "right"
-				if not util.isOccupied(world, entity.x + 1, entity.y) then
+				if not util.checkCollision(world, entity.x + 1, entity.y) then
 					entity.moveDirection = "right"
 				end
 			end
