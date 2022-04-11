@@ -1,10 +1,11 @@
--- For level development
+-- For scene development
 
+local json = require("lib.json")
 local consts = require("consts")
 
 local saveDirectory = require("util.saveDirectory")
 
-local function tiledConverters(args) -- this splits off from love.load
+local function converters(args) -- this splits off from love.load
 	if args[2] == "csvToBin" then
 		saveDirectory:enable()
 		local csv = love.filesystem.read(args[3])
@@ -13,7 +14,7 @@ local function tiledConverters(args) -- this splits off from love.load
 		print("done")
 		love.event.quit()
 		return
-	elseif args[2] == "tiledExportToLevel" then
+	elseif args[2] == "tiledExportToScene" then
 		saveDirectory:enable()
 		local folderPath = "tiled/" .. args[3] .. "/"
 		local import
@@ -36,7 +37,7 @@ local function tiledConverters(args) -- this splits off from love.load
 				local noEntities = true
 				for _, object in ipairs(layer.objects) do
 					noEntities = false
-					ent = ent .. "\t{\"position\": [" .. math.floor(object.x / consts.tileSize) .. ", " .. math.floor(object.y / consts.tileSize) .. "], "
+					ent = ent .. "\t{\"x\": " .. math.floor(object.x / consts.tileSize) .. ", \"y\": " .. math.floor(object.y / consts.tileSize) .. ", "
 					for _, v in ipairs(object.properties) do
 						local valueString = v.type == "string" and "\"" .. v.value .. "\"" or tostring(v.value)
 						ent = ent .. "\"" .. v.name .. "\": " .. valueString .. ", "
@@ -67,3 +68,5 @@ local function tiledConverters(args) -- this splits off from love.load
 		return
 	end
 end
+
+return converters

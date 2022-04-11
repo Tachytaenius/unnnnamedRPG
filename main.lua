@@ -26,7 +26,7 @@ local commandDone, commandDone, commandDone
 
 function love.load(args)
 	if args[1] == "convert" then
-		converters(args)
+		util.converters(args)
 		return
 	end
 	love.graphics.setDefaultFilter("nearest", "nearest")
