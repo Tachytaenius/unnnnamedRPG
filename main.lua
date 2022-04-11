@@ -60,8 +60,8 @@ function love.draw(lerpI)
 		end
 		
 		for entity in world.entities:elements() do
-			local quad = util.getEntityQuad(entity, entity.asset.info.defaultSpritesheetName)
-			local spritesheetName = entity.asset.info.defaultSpritesheetName
+			local spritesheetName = util.getEntitySpritesheetName(entity)
+			local quad = util.getEntityQuad(entity, spritesheetName)
 			local image = entity.asset[spritesheetName]
 			local x, y = math.lerp(entity.prev.drawX, entity.drawX, lerpI), math.lerp(entity.prev.drawY, entity.drawY, lerpI)
 			x, y = x * consts.tileSize, y * consts.tileSize
