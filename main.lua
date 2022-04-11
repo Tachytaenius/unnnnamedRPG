@@ -240,6 +240,12 @@ function love.update(dt)
 			entity.walkCyclePos = entity.walkCyclePos or entity.nextWalkCycleStartPos
 			entity.walkCyclePos = (entity.walkCyclePos + dt / entityType.walkCycleTime) % 1
 		end
+		-- try interaction
+		if entity == player then
+			if entity.moveProgress == nil and commandDone.interact then
+				util.tryInteraction(entity)
+			end
+		end
 		-- get draw pos
 		entity.drawX, entity.drawY = util.translateByDirection(entity.x, entity.y, entity.moveDirection, entity.moveProgress)
 	end

@@ -6,7 +6,7 @@ local function checkCollision(world, x, y)
 		return true
 	end
 	for entity in world.entities:elements() do
-		if entity.type.solid then
+		if entity.type.solid or entity.type.door and not entity.open then
 			if entity.x == x and entity.y == y then
 				return true
 			end

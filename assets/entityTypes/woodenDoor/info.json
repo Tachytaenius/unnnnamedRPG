@@ -1,0 +1,15 @@
+{
+	"defaultSpritesheetName": "closed",
+	"closedSpritesheetName": "closed",
+	"openSpritesheetName": "open",
+	"spritesheetInfo": {
+		"closed": {
+			"width": 16, "height": 16,
+			"offsetX": 0, "offsetY": 0
+		},
+		"open": {
+			"width": 16, "height": 16,
+			"offsetX": 0, "offsetY": 0
+		}
+	}
+}
