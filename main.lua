@@ -32,6 +32,7 @@ function love.load(args)
 	end
 	love.graphics.setDefaultFilter("nearest", "nearest")
 	love.graphics.setLineStyle("rough")
+	util.recreateWindow()
 	assets.load()
 	animatedTiles:reset()
 	world, player, camera = util.loadMap("testScene")
@@ -80,7 +81,7 @@ function love.draw(lerpI)
 	love.graphics.origin()
 	love.graphics.setCanvas()
 	local ww, wh = love.graphics.getDimensions()
-	local scale = consts.contentScale -- TEMP
+	local scale = settings.graphics.contentScale -- TEMP
 	cw, ch = cw * scale, ch * scale
 	love.graphics.draw(contentCanvas, (ww - cw) / 2, (wh - ch) / 2, 0, scale)
 end
