@@ -113,8 +113,6 @@ local function updateEntities(world, player, dt, commandDone)
 				util.tryInteraction(entity)
 			end
 		end
-		-- get draw pos
-		entity.drawX, entity.drawY = util.translateByDirection(entity.x, entity.y, entity.moveDirection, entity.moveProgress)
 	end
 end
 

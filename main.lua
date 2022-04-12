@@ -41,13 +41,13 @@ function love.load(args)
 	commandDone = {}
 end
 
-function love.draw(lerpI)
-	lerpI = 1
+function love.draw()
+	love.graphics.setFont(assets.font.font)
 	love.graphics.setCanvas(contentCanvas)
 	love.graphics.clear()
 	local cw, ch = contentCanvas:getDimensions()
 	if camera then
-		local camX, camY = math.lerp(camera.prev.drawX, camera.drawX, lerpI), math.lerp(camera.prev.drawY, camera.drawY, lerpI)
+		local camX, camY = util.translateByDirection(camera.x, camera.y, camera.moveDirection, camera.moveProgress)
 		camX, camY = camX * consts.tileSize, camY * consts.tileSize
 		camX, camY = math.floor(camX), math.floor(camY)
 		love.graphics.translate(-camX, -camY)
@@ -70,7 +70,7 @@ function love.draw(lerpI)
 			local spritesheetName = util.getEntitySpritesheetName(entity)
 			local quad = util.getEntityQuad(entity, spritesheetName)
 			local image = entity.asset[spritesheetName]
-			local x, y = math.lerp(entity.prev.drawX, entity.drawX, lerpI), math.lerp(entity.prev.drawY, entity.drawY, lerpI)
+			local x, y = util.translateByDirection(entity.x, entity.y, entity.moveDirection, entity.moveProgress)
 			x, y = x * consts.tileSize, y * consts.tileSize
 			x = x + consts.tileSize / 2 - entity.asset.info.spritesheetInfo[spritesheetName].width / 2
 			y = y + consts.tileSize / 2 - entity.asset.info.spritesheetInfo[spritesheetName].height / 2
@@ -84,6 +84,7 @@ function love.draw(lerpI)
 			end
 		end
 	end
+	ui.draw()
 	love.graphics.origin()
 	love.graphics.setCanvas()
 	local ww, wh = love.graphics.getDimensions()
@@ -167,9 +168,14 @@ function love.update(dt)
 		util.recreateWindow()
 	end
 	
-	if ui.active then
-		
-	else
+	if commandDone.openInventory then
+		if not ui.active() then
+			ui.showEntityInventory(player)
+		end
+	end
+	
+	ui.update(dt, commandDone)
+	if not ui.active() then
 		-- Actual content update
 		util.updateEntities(world, player, dt, commandDone)
 		animatedTiles:update(dt)
