@@ -19,10 +19,10 @@ local function updateEntities(world, player, dt, commandDone)
 		if entity.moveProgress == nil then
 			local up, down, left, right
 			if entity == player then
-				up = commandDone.up
-				down = commandDone.down
-				left = commandDone.left
-				right = commandDone.right
+				up = commandDone.moveUp
+				down = commandDone.moveDown
+				left = commandDone.moveLeft
+				right = commandDone.moveRight
 				if up and down then
 					up, down = false, false
 				end
@@ -32,13 +32,16 @@ local function updateEntities(world, player, dt, commandDone)
 				local vertical = up or down
 				local horizontal = left or right
 				if vertical and horizontal then
-					if inputPriority == "vertical" then
+					if not entity.inputPriority then
+						entity.inputPriority = "vertical"
+					end
+					if entity.inputPriority == "vertical" then
 						left, right = false, false
 					else
 						up, down = false, false
 					end
 				else
-					inputPriority = vertical and "horizontal" or "vertical"
+					entity.inputPriority = vertical and "horizontal" or "vertical"
 				end
 			end
 			if up then

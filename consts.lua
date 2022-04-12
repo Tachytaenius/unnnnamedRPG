@@ -15,10 +15,10 @@ for i, v in ipairs(consts.entityLayersByIndex) do
 end
 
 consts.commands = {}
-consts.commands.up = "held"
-consts.commands.down = "held"
-consts.commands.left = "held"
-consts.commands.right = "held"
+consts.commands.moveUp = "held"
+consts.commands.moveDown = "held"
+consts.commands.moveLeft = "held"
+consts.commands.moveRight = "held"
 consts.commands.interact = "pressed"
 consts.commands.previousDisplay = "released"
 consts.commands.nextDisplay = "released"

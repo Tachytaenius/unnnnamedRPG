@@ -7,6 +7,7 @@ local registry = require("registry")
 local assets = require("assets")
 local settings = require("settings")
 local animatedTiles = require("animatedTiles")
+local ui = require("ui")
 local util = require("util")
 
 do -- load util
@@ -21,7 +22,6 @@ end
 
 local world, player, camera, paused
 local contentCanvas
-local inputPriority
 local commandDone, commandDone, commandDone
 
 function love.load(args)
@@ -35,7 +35,7 @@ function love.load(args)
 	assets.load()
 	animatedTiles:reset()
 	world, player, camera = util.loadMap("testScene")
-	inputPriority = "vertical"
+	ui.clear()
 	paused = false
 	contentCanvas = love.graphics.newCanvas(consts.contentWidth, consts.contentHeight)
 	commandDone = {}
@@ -167,9 +167,13 @@ function love.update(dt)
 		util.recreateWindow()
 	end
 	
-	-- Actual content update
-	util.updateEntities(world, player, dt, commandDone)
-	animatedTiles:update(dt)
+	if ui.active then
+		
+	else
+		-- Actual content update
+		util.updateEntities(world, player, dt, commandDone)
+		animatedTiles:update(dt)
+	end
 	
 	commandDone = {}
 end

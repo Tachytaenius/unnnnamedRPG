@@ -11,10 +11,10 @@ settings.graphics.vsync = 1
 settings.graphics.displayNumber = 0
 
 settings.commands = {}
-settings.commands.up = "w"
-settings.commands.down = "s"
-settings.commands.left = "a"
-settings.commands.right = "d"
+settings.commands.moveUp = "w"
+settings.commands.moveDown = "s"
+settings.commands.moveLeft = "a"
+settings.commands.moveRight = "d"
 settings.commands.interact = "l"
 settings.commands.confirm = "l"
 settings.commands.cancel = "k"
