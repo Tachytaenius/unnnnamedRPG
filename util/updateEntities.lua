@@ -88,6 +88,10 @@ local function updateEntities(world, player, dt, commandDone)
 			if entity.moveDirection then
 				entity.moveProgress = 0
 			end
+			-- cancel any just-started movement if direction only
+			if entity == player and commandDone.changeDirectionOnly then
+				entity.moveProgress, entity.moveDirection = nil, nil
+			end
 		end
 		-- timers
 		if entity.turnMovementDelayTimer then
