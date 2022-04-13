@@ -105,6 +105,7 @@ function ui.update(dt, commandDone)
 					end
 				else
 					window.cursor = 1
+					window.viewOffset = 0
 				end
 			end
 			if window.type == "transferInventories" then
