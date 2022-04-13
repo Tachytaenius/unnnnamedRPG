@@ -8,7 +8,7 @@ consts.contentHeight = 144
 
 consts.tileSize = 16
 
-consts.tileInventoryCapacity = 20 -- how much dropped item can fit on one tile?
+consts.tileInventoryCapacity = 40 -- how much dropped item can fit on one tile?
 
 consts.entityLayersByIndex = {"decals", "furniture", "actors"}
 consts.entityLayerIndicesByName = {}

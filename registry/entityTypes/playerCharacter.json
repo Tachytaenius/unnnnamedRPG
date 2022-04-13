@@ -5,5 +5,5 @@
 	"walkCycleTime": 0.7,
 	"dontResetWalkCyclePos": true,
 	"alternateWalkCycleStartPos": true,
-	"inventoryCapacity": 40
+	"inventoryCapacity": 80
 }
