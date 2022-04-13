@@ -64,7 +64,7 @@ function ui.showTransferringInventories(inventoryA, inventoryB, displayNameA, di
 		if #self.items <= 0 then return end
 		local selectedStack = self.items[self.cursor]
 		local amountToTransfer = 1
-		if util.inventory.getAmount(self.otherItems) + amountToTransfer <= self.otherItems.capacity then
+		if util.inventory.getAmount(self.otherItems) + amountToTransfer * registry.itemTypes[selectedStack.type].size <= self.otherItems.capacity then
 			local success, error = util.inventory.takeFromStack(self.items, selectedStack, amountToTransfer)
 			if success then
 				util.inventory.give(self.otherItems, selectedStack.type, amountToTransfer)

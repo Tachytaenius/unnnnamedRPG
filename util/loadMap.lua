@@ -77,7 +77,6 @@ local function loadMap(path)
 	loadTileData("background", false)
 	loadTileData("foreground", false)
 	
-	
 	return world, player, camera
 end
 
