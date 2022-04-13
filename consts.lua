@@ -8,6 +8,8 @@ consts.contentHeight = 144
 
 consts.tileSize = 16
 
+consts.tileInventoryCapacity = 10 -- how many dropped items can fit on one tile?
+
 consts.entityLayersByIndex = {"decals", "furniture", "actors"}
 consts.entityLayerIndicesByName = {}
 for i, v in ipairs(consts.entityLayersByIndex) do
@@ -24,6 +26,11 @@ consts.commands.interact = "pressed"
 consts.commands.openInventory = "pressed"
 consts.commands.confirm = "pressed"
 consts.commands.cancel = "pressed"
+consts.commands.changeInventoryScreens = "pressed"
+consts.commands.selectUp = "pressed"
+consts.commands.selectDown = "pressed"
+consts.commands.selectLeft = "pressed"
+consts.commands.selectRight = "pressed"
 consts.commands.previousDisplay = "released"
 consts.commands.nextDisplay = "released"
 consts.commands.scaleDown = "released"

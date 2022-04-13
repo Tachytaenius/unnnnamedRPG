@@ -53,9 +53,17 @@ function love.draw()
 		love.graphics.translate(-camX, -camY)
 		love.graphics.translate(cw / 2, ch / 2)
 		
-		for x = 0, world.tileMapWidth - 1 do
-			for y = 0, world.tileMapHeight - 1 do
+		local minTileX = math.max(0, math.floor((camX-cw/2) / consts.tileSize))
+		local maxTileX = math.min(world.tileMapWidth - 1, math.ceil((camX+cw/2) / consts.tileSize))
+		local minTileY = math.max(0, math.floor((camY-ch/2) / consts.tileSize))
+		local maxTileY = math.min(world.tileMapHeight - 1, math.ceil((camY+ch/2) / consts.tileSize))
+		
+		for x = minTileX, maxTileX do
+			for y = minTileY, maxTileY do
 				love.graphics.draw(assets.tileTypes[world.backgroundTiles[x][y].name], x * consts.tileSize, y * consts.tileSize)
+				if world.tileInventories[x][y] and #world.tileInventories[x][y] > 0 then
+					love.graphics.draw(assets.tileInventory, x * consts.tileSize, y * consts.tileSize)
+				end
 			end
 		end
 		
@@ -78,8 +86,8 @@ function love.draw()
 			love.graphics.draw(image, quad, x, y)
 		end
 		
-		for x = 0, world.tileMapWidth - 1 do
-			for y = 0, world.tileMapHeight - 1 do
+		for x = minTileX, maxTileX do
+			for y = minTileY, maxTileY do
 				love.graphics.draw(assets.tileTypes[world.foregroundTiles[x][y].name], x * consts.tileSize, y * consts.tileSize)
 			end
 		end
@@ -168,14 +176,16 @@ function love.update(dt)
 		util.recreateWindow()
 	end
 	
-	if commandDone.openInventory then
-		if not ui.active() then
-			ui.showEntityInventory(player)
+	if commandDone.openInventory and not ui.active() then
+		if player.moveProgress == nil and world.tileInventories[player.x] and world.tileInventories[player.x][player.y] then
+			ui.showTransferringInventories(player.inventory, world.tileInventories[player.x][player.y], "Player", "Ground")
+		else
+			-- ui.showEntityInventory(player, "Player")
 		end
 	end
-	
 	ui.update(dt, commandDone)
-	if not ui.active() then
+	
+	if not ui.active() and not paused then
 		-- Actual content update
 		util.updateEntities(world, player, dt, commandDone)
 		animatedTiles:update(dt)

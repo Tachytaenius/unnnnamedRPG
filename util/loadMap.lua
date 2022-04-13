@@ -15,6 +15,13 @@ local function loadMap(path)
 	-- info.json
 	local world = json.decode(love.filesystem.read(path .. "info.json"))
 	world.tint = world.tint or {1, 1, 1}
+	world.tileInventories = {} -- for dropped items
+	for x = 0, world.tileMapWidth - 1 do
+		world.tileInventories[x] = {}
+		for y = 0, world.tileMapHeight - 1 do
+			world.tileInventories[x][y] = {capacity = consts.tileInventoryCapacity}
+		end
+	end
 	
 	-- entities.json
 	local entitiesJson = json.decode(love.filesystem.read(path .. "entities.json"))

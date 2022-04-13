@@ -58,4 +58,25 @@ function inventory.take(inv, itemType, amountToTake)
 	return true
 end
 
+function inventory.takeFromStack(inv, stack, amountToTake)
+	local stackIndex
+	for i, inventoryStack in ipairs(inv) do
+		if inventoryStack == stack then
+			stackIndex = i
+			break
+		end
+	end
+	if not stackIndex then
+		error("Stack not found in inventory")
+	end
+	if stack.count < amountToTake then
+		return false, "notEnoughOfItem"
+	end
+	stack.count = stack.count - amountToTake
+	if stack.count == 0 then
+		table.remove(inv, stackIndex)
+	end
+	return true
+end
+
 return inventory

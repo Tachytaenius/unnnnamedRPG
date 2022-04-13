@@ -54,11 +54,6 @@ local function traverse(table, path)
 end
 
 function assets.load()
-	assets.font = {}
-	assets.font.imageData = love.image.newImageData("assets/font/image.png")
-	assets.font.info = json.decode(love.filesystem.read("assets/font/info.json"))
-	assets.font.font = love.graphics.newImageFont(assets.font.imageData, assets.font.info.glyphs)
-	
 	for entityTypeName, entityType in pairs(registry.entityTypes) do
 		local _, entityAsset = tryFile("assets/entityTypes/" .. entityType.assetPath, entityType.assetPath:match("[^/]+$"), true)
 		if not entityAsset then
@@ -90,6 +85,16 @@ function assets.load()
 	saveDirectory:enable()
 	atlasCanvas:newImageData():encode("png", "exportedTileAtlas.png")
 	saveDirectory:disable()
+	
+	assets.font = {}
+	assets.font.imageData = love.image.newImageData("assets/font/image.png")
+	assets.font.info = json.decode(love.filesystem.read("assets/font/info.json"))
+	assets.font.font = love.graphics.newImageFont(assets.font.imageData, assets.font.info.glyphs)
+	assets.tileInventory = love.graphics.newImage("assets/tileInventory.png")
+	assets.inventory = {}
+	assets.inventory.upMoreIndicator = love.graphics.newImage("assets/inventory/upMoreIndicator.png")
+	assets.inventory.downMoreIndicator = love.graphics.newImage("assets/inventory/downMoreIndicator.png")
+	assets.inventory.cursor = love.graphics.newImage("assets/inventory/cursor.png")
 end
 
 return assets
