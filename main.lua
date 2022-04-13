@@ -48,7 +48,7 @@ function love.draw()
 	local cw, ch = contentCanvas:getDimensions()
 	if camera then
 		local camX, camY = util.translateByDirection(camera.x, camera.y, camera.moveDirection, camera.moveProgress)
-		camX, camY = camX * consts.tileSize, camY * consts.tileSize
+		camX, camY = (camX + 0.5) * consts.tileSize, (camY + 0.5) * consts.tileSize
 		camX, camY = math.floor(camX), math.floor(camY)
 		love.graphics.translate(-camX, -camY)
 		love.graphics.translate(cw / 2, ch / 2)
@@ -99,6 +99,9 @@ function love.draw()
 	local scale = settings.graphics.contentScale -- TEMP
 	cw, ch = cw * scale, ch * scale
 	love.graphics.draw(contentCanvas, (ww - cw) / 2, (wh - ch) / 2, 0, scale)
+	-- love.graphics.setColor(0.2, 0.2, 0.2)
+	-- love.graphics.rectangle("line", (ww - cw) / 2 - 1, (wh - ch) / 2 - 1, cw + 2, ch + 2)
+	-- love.graphics.setColor(1, 1, 1)
 end
 
 function love.keypressed(key)

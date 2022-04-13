@@ -1,5 +1,6 @@
 local list = require("lib.list")
 
+local registry = require("registry")
 local settings = require("settings")
 local assets = require("assets")
 local util = require("util")
@@ -150,7 +151,7 @@ function ui.draw()
 				end
 			end
 			-- do title
-			drawText(window.displayName .. extraText, 0, 0, 0)
+			drawText(window.displayName .. " (" .. util.inventory.getAmount(window.items) .. "/" .. window.items.capacity .. ") " .. extraText, 0, 0, 0)
 			-- more above indicator
 			if window.viewOffset > 0 then
 				love.graphics.draw(assets.inventory.upMoreIndicator, 8, 1 * assets.font.font:getHeight())
@@ -168,7 +169,7 @@ function ui.draw()
 					x = assets.inventory.cursor:getWidth()
 				end
 				local stack = window.items[stackIndex]
-				drawText(stack.type .. " x" .. stack.count, x, 8, thisViewOffset)
+				drawText(registry.itemTypes[stack.type].displayName .. " x" .. stack.count .. " (" .. stack.count * registry.itemTypes[stack.type].size .. ")", x, 8, thisViewOffset)
 				thisViewOffset = thisViewOffset + 1
 			end
 			-- more below indicator

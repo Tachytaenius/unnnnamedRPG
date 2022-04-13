@@ -2,7 +2,8 @@ local json = require("lib.json")
 
 local registry = {
 	entityTypes = {},
-	tileTypes = {}, numTileTypes = 0
+	tileTypes = {}, numTileTypes = 0,
+	itemTypes = {}
 }
 
 local function traverse(registryTable, path, createFromJson, registryPathPrefixLength)
@@ -33,7 +34,12 @@ local function createTileType(jsonData, path)
 	return jsonData
 end
 
+local function createItemType(jsonData, path)
+	return jsonData
+end
+
 traverse(registry.entityTypes, "registry/entityTypes/", createEntityType)
 traverse(registry.tileTypes, "registry/tileTypes/", createTileType)
+traverse(registry.itemTypes, "registry/itemTypes/", createItemType)
 
 return registry

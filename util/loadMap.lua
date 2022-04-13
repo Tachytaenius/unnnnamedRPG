@@ -15,6 +15,7 @@ local function loadMap(path)
 	-- info.json
 	local world = json.decode(love.filesystem.read(path .. "info.json"))
 	world.tint = world.tint or {1, 1, 1}
+	-- TODO: Load tile inventories from a json
 	world.tileInventories = {} -- for dropped items
 	for x = 0, world.tileMapWidth - 1 do
 		world.tileInventories[x] = {}
