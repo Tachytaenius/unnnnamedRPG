@@ -1,3 +1,5 @@
+local registry = require("registry")
+
 local function checkCollision(world, x, y)
 	if x < 0 or x >= world.tileMapWidth or y < 0 or y >= world.tileMapHeight then
 		return true
@@ -6,7 +8,8 @@ local function checkCollision(world, x, y)
 		return true
 	end
 	for entity in world.entities:elements() do
-		if entity.type.solid or entity.type.door and not entity.open then
+		local entityType = registry.entityTypes[entity.typeName]
+		if entityType.solid or entityType.door and not entity.open then
 			if entity.x == x and entity.y == y then
 				return true
 			end

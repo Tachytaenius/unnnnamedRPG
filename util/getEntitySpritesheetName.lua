@@ -1,8 +1,12 @@
+local registry = require("registry")
+local assets = require("assets")
+
 local function getEntitySpritesheetName(entity)
-	if entity.type.door then
-		return entity.open and entity.asset.info.openSpritesheetName or entity.asset.info.closedSpritesheetName
+	local entityAsset = assets.entityTypes[entity.typeName]
+	if registry.entityTypes[entity.typeName].door then
+		return entity.open and entityAsset.info.openSpritesheetName or entityAsset.info.closedSpritesheetName
 	end
-	return entity.asset.info.defaultSpritesheetName
+	return entityAsset.info.defaultSpritesheetName
 end
 
 return getEntitySpritesheetName

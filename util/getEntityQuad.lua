@@ -1,7 +1,9 @@
 local quadreasonable = require("lib.quadreasonable")
 
+local assets = require("assets")
+
 local function getEntityQuad(entity, spritesheetName)
-	local assetInfo = entity.asset.info
+	local assetInfo = assets.entityTypes[entity.typeName].info
 	local spritesheetInfo = assetInfo.spritesheetInfo[spritesheetName]
 	local spriteX, spriteY, spriteCountX, spriteCountY, spriteWidth, spriteHeight, padding
 	spriteWidth, spriteHeight = spritesheetInfo.width, spritesheetInfo.height

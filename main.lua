@@ -72,16 +72,17 @@ function love.draw()
 			entityDrawOrder[#entityDrawOrder+1] = entity
 		end
 		table.sort(entityDrawOrder, function(a, b)
-			return consts.entityLayerIndicesByName[a.type.layer] < consts.entityLayerIndicesByName[b.type.layer]
+			return consts.entityLayerIndicesByName[registry.entityTypes[a.typeName].layer] < consts.entityLayerIndicesByName[registry.entityTypes[b.typeName].layer]
 		end)
 		for _, entity in ipairs(entityDrawOrder) do
+			local entityAsset = assets.entityTypes[entity.typeName]
 			local spritesheetName = util.getEntitySpritesheetName(entity)
 			local quad = util.getEntityQuad(entity, spritesheetName)
-			local image = entity.asset[spritesheetName]
+			local image = entityAsset[spritesheetName]
 			local x, y = util.translateByDirection(entity.x, entity.y, entity.moveDirection, entity.moveProgress)
 			x, y = x * consts.tileSize, y * consts.tileSize
-			x = x + consts.tileSize / 2 - entity.asset.info.spritesheetInfo[spritesheetName].width / 2
-			y = y + consts.tileSize / 2 - entity.asset.info.spritesheetInfo[spritesheetName].height / 2
+			x = x + consts.tileSize / 2 - entityAsset.info.spritesheetInfo[spritesheetName].width / 2
+			y = y + consts.tileSize / 2 - entityAsset.info.spritesheetInfo[spritesheetName].height / 2
 			x, y = math.floor(x), math.floor(y) -- stop bleeding
 			love.graphics.draw(image, quad, x, y)
 		end

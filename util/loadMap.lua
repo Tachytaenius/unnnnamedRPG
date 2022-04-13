@@ -15,13 +15,20 @@ local function loadMap(path)
 	-- info.json
 	local world = json.decode(love.filesystem.read(path .. "info.json"))
 	world.tint = world.tint or {1, 1, 1}
-	-- TODO: Load tile inventories from a json
+	
+	-- tileInventories.json
 	world.tileInventories = {} -- for dropped items
 	for x = 0, world.tileMapWidth - 1 do
 		world.tileInventories[x] = {}
 		for y = 0, world.tileMapHeight - 1 do
 			world.tileInventories[x][y] = {capacity = consts.tileInventoryCapacity}
 		end
+	end
+	local tileInventories = json.decode(love.filesystem.read(path .. "tileInventories.json"))
+	for _, tileInventoryEntry in ipairs(tileInventories) do
+		local tileInventory = tileInventoryEntry.items -- json limitations
+		world.tileInventories[tileInventoryEntry.x][tileInventoryEntry.y] = tileInventory
+		tileInventory.capacity = consts.tileInventoryCapacity
 	end
 	
 	-- entities.json
@@ -48,6 +55,7 @@ local function loadMap(path)
 		assert(tileTypesById[i], "Unknown tile type name " .. i .. " " .. name)
 		i = i + 1
 	end
+	world.tileTypesById = tileTypesById
 	
 	-- background/foregroundTileData.bin (or csv)
 	local function loadTileData(name, colliders)
@@ -68,7 +76,8 @@ local function loadMap(path)
 	end
 	loadTileData("background", false)
 	loadTileData("foreground", false)
-		
+	
+	
 	return world, player, camera
 end
 

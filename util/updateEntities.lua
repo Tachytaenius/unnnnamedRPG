@@ -1,8 +1,9 @@
 local util = require("util")
+local registry = require("registry")
 
 local function updateEntities(world, player, dt, commandDone)
 	for entity in world.entities:elements() do
-		local entityType = entity.type
+		local entityType = registry.entityTypes[entity.typeName]
 		entity.prev = setmetatable({}, getmetatable(entity.prev) or {__index = entity})
 		entity.prev.drawX, entity.prev.drawY = entity.drawX, entity.drawY
 		-- if we're moving, do movement
@@ -46,7 +47,7 @@ local function updateEntities(world, player, dt, commandDone)
 			end
 			if up then
 				if entity.direction ~= "up" then
-					entity.turnMovementDelayTimer = entity.type.turnMovementDelay
+					entity.turnMovementDelayTimer = entityType.turnMovementDelay
 				end
 				entity.direction = "up"
 				if not entity.turnMovementDelayTimer then
@@ -56,7 +57,7 @@ local function updateEntities(world, player, dt, commandDone)
 				end
 			elseif down then
 				if entity.direction ~= "down" then
-					entity.turnMovementDelayTimer = entity.type.turnMovementDelay
+					entity.turnMovementDelayTimer = entityType.turnMovementDelay
 				end
 				entity.direction = "down"
 				if not entity.turnMovementDelayTimer then
@@ -66,7 +67,7 @@ local function updateEntities(world, player, dt, commandDone)
 				end
 			elseif left then
 				if entity.direction ~= "left" then
-					entity.turnMovementDelayTimer = entity.type.turnMovementDelay
+					entity.turnMovementDelayTimer = entityType.turnMovementDelay
 				end
 				entity.direction = "left"
 				if not entity.turnMovementDelayTimer then
@@ -76,7 +77,7 @@ local function updateEntities(world, player, dt, commandDone)
 				end
 			elseif right then
 				if entity.direction ~= "right" then
-					entity.turnMovementDelayTimer = entity.type.turnMovementDelay
+					entity.turnMovementDelayTimer = entityType.turnMovementDelay
 				end
 				entity.direction = "right"
 				if not entity.turnMovementDelayTimer then
@@ -110,7 +111,7 @@ local function updateEntities(world, player, dt, commandDone)
 		-- try interaction
 		if entity == player then
 			if entity.moveProgress == nil and commandDone.interact then
-				util.tryInteraction(entity)
+				util.tryInteraction(world, entity)
 			end
 		end
 	end
