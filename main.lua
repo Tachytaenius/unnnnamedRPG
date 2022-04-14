@@ -180,14 +180,7 @@ function love.update(dt)
 		util.recreateWindow()
 	end
 	
-	if commandDone.openInventory and not ui.active() then
-		if player.moveProgress == nil and world.tileInventories[player.x] and world.tileInventories[player.x][player.y] then
-			ui.showTransferringInventories(player.inventory, world.tileInventories[player.x][player.y], "Player", "Ground")
-		else
-			-- ui.showEntityInventory(player, "Player")
-		end
-	end
-	ui.update(dt, commandDone)
+	ui.update(dt, world, player, camera, commandDone)
 	
 	if not ui.active() and not paused then
 		-- Actual content update

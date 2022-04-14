@@ -2,6 +2,7 @@ local list = require("lib.list")
 
 local registry = require("registry")
 local settings = require("settings")
+local consts = require("consts")
 local assets = require("assets")
 local util = require("util")
 
@@ -23,7 +24,7 @@ function ui.active()
 	return active
 end
 
-function ui.cancel()
+function ui.cancelAll()
 	-- if can't cancel then return false end
 	local i = 1
 	while i <= ui.windows.size do
@@ -38,8 +39,18 @@ function ui.cancel()
 	return true
 end
 
+function ui.cancelFocused()
+	-- cancels focused
+	-- if can't cancel then return false end
+	if ui.focusedWindow then
+		ui.windows:remove(ui.focusedWindow)
+		ui.focusedWindow = ui.focusedWindow.windowToFocusWhenDismissed or nil
+	end
+	return true
+end
+
 function ui.inventory(inventory, displayName, selectionFunction)
-	local window = {justOpened = true}
+	local window = {}
 	ui.windows:add(window)
 	window.selectionFunction = selectionFunction
 	window.type = "inventory"
@@ -78,24 +89,74 @@ function ui.showTransferringInventories(inventoryA, inventoryB, displayNameA, di
 	window.swapped = false
 end
 
-function ui.update(dt, commandDone)
-	if ui.focusedWindow and (ui.focusedWindow.type == "inventory" or ui.focusedWindow.type == "transferInventories") and not ui.focusedWindow.justOpened and commandDone.openInventory or commandDone.cancel then
-		ui.cancel()
+function ui.textBox(text, x, y, tx, ty, width, height)
+	local window = {}
+	ui.windows:add(window)
+	window.x, window.y = x, y
+	window.width, window.height = width, height
+	window.type = "textBox"
+	window.active = true
+	window.text = text
+	window.textX, window.textY = tx, ty
+	window.windowToFocusWhenDismissed = ui.focusedWindow
+	return window
+end
+
+function ui.textBoxWrapper(text)
+	local textWidth = assets.font.font:getWidth(text)
+	local textHeight = assets.font.font:getHeight()
+	local windowX, windowY = (consts.contentWidth - textWidth) / 2, (consts.contentHeight - textHeight) / 2
+	ui.focusedWindow = ui.textBox(text, math.floor(windowX), math.floor(windowY), 0, 0, math.ceil(textWidth+1), math.ceil(textHeight+1))
+end
+
+function ui.update(dt, world, player, camera, commandDone)
+	-- Only allow commands to be registered once per frame
+	local commandDoneCopy = {}
+	for k, v in pairs(commandDone) do
+		commandDoneCopy[k] = v
 	end
+	local commandDoneCopyUsed = {}
+	local uiCommandDone = {} -- empty so that __index will work
+	setmetatable(uiCommandDone, {__index = function(uiCommandDone, command)
+		if commandDoneCopyUsed[command] then
+			return nil
+		end
+		commandDoneCopyUsed[command] = true
+		return rawget(commandDoneCopy, command)
+	end})
+	
+	-- try opening inventory
+	if not ui.active() and uiCommandDone.openInventory then
+		if player.moveProgress == nil and world.tileInventories[player.x] and world.tileInventories[player.x][player.y] then
+			ui.showTransferringInventories(player.inventory, world.tileInventories[player.x][player.y], "Player", "Ground")
+		else
+			-- ui.showEntityInventory(player, "Player")
+		end
+	end
+	
+	-- try closing
+	if ui.focusedWindow and (ui.focusedWindow.type == "inventory" or ui.focusedWindow.type == "transferInventories") and (uiCommandDone.openInventory or uiCommandDone.cancel) then
+		ui.cancelFocused()
+	end
+	if ui.focusedWindow and ui.focusedWindow.type == "textBox" then
+		if uiCommandDone.cancel or uiCommandDone.confirm then
+			ui.cancelFocused()
+		end
+	end
+	
 	for window in ui.windows:elements() do
 		if window == ui.focusedWindow then
 			if window.type == "inventory" or window.type == "transferInventories" then
-				if commandDone.confirm then
+				if uiCommandDone.confirm then
 					if window.selectionFunction then
 						window:selectionFunction()
 					end
 				end
 				if #window.items > 0 then
-					if commandDone.selectUp then
+					if uiCommandDone.selectUp then
 						window.cursor = math.max(1, window.cursor - 1)
 					end
-					if commandDone.selectDown then
-						
+					if uiCommandDone.selectDown then
 						window.cursor = math.min(#window.items, window.cursor + 1)
 					end
 					if window.cursor < window.viewOffset + 1 then
@@ -104,13 +165,16 @@ function ui.update(dt, commandDone)
 					if window.cursor > window.viewOffset + window.visibleSlots + 1 then
 						window.viewOffset = window.cursor - window.visibleSlots - 1
 					end
+					if window.cursor > #window.items then
+						window.cursor = #window.items
+					end
 				else
 					window.cursor = 1
 					window.viewOffset = 0
 				end
 			end
 			if window.type == "transferInventories" then
-				if commandDone.changeInventoryScreens then
+				if uiCommandDone.changeInventoryScreens then
 					window.cursor = 1
 					window.swapped = not window.swapped
 					window.items, window.otherItems = window.otherItems, window.items
@@ -118,9 +182,6 @@ function ui.update(dt, commandDone)
 				end
 			end
 		end
-	end
-	for window in ui.windows:elements() do
-		window.justOpened = nil
 	end
 end
 
@@ -136,9 +197,14 @@ function ui.draw()
 		love.graphics.push("all")
 		love.graphics.origin()
 		love.graphics.translate(window.x, window.y)
+		love.graphics.setColor(0.25, 0.25, 0.25)
+		love.graphics.rectangle("line", 0, 0, window.width + 1, window.height + 1)
 		love.graphics.setColor(0.5, 0.5, 0.5)
 		love.graphics.rectangle("fill", 0, 0, window.width, window.height)
 		love.graphics.setColor(1, 1, 1)
+		if window.type == "textBox" then
+			drawText(window.text, window.textX, window.textY, 0)
+		end
 		if window.type == "inventory" or window.type == "transferInventories" then
 			-- handle (keybinding) for title when in a transferring inventory screen
 			local extraText = ""
