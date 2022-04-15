@@ -41,6 +41,11 @@ function love.load(args)
 	commandDone = {}
 end
 
+function love.quit()
+	print(world.location)
+	util.save(world, player, camera)
+end
+
 function love.draw()
 	love.graphics.setFont(assets.font.font)
 	love.graphics.setCanvas(contentCanvas)

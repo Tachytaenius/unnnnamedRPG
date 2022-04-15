@@ -4,30 +4,49 @@ local consts = require("consts")
 
 local function serialise(world, player, camera)
 	-- backup and remove info that is serialised into other files
-	local entities = world.entities
-	local tileInventories = world.tileInventories
-	local backgroundTiles = world.backgroundTiles
-	local foregroundTiles = world.foregroundTiles
-	local tileTypesById = world.tileTypesById
-	world.entities = nil
-	world.tileInventories = nil
-	world.backgroundTiles = nil
-	world.foregroundTiles = nil
-	world.tileTypesById = nil
-	-- serialise
-	info = json.encode(world)
-	-- restore
-	world.entities = entities
-	world.tileInventories = tileInventories
-	world.backgroundTiles = backgroundTiles
-	world.foregroundTiles = foregroundTiles
-	world.tileTypesById = tileTypesById
+	do
+		local entities = world.entities
+		local tileInventories = world.tileInventories
+		local backgroundTiles = world.backgroundTiles
+		local foregroundTiles = world.foregroundTiles
+		local tileTypesById = world.tileTypesById
+		world.entities = nil
+		world.tileInventories = nil
+		world.backgroundTiles = nil
+		world.foregroundTiles = nil
+		world.tileTypesById = nil
+		-- serialise
+		info = json.encode(world)
+		-- restore
+		world.entities = entities
+		world.tileInventories = tileInventories
+		world.backgroundTiles = backgroundTiles
+		world.foregroundTiles = foregroundTiles
+		world.tileTypesById = tileTypesById
+	end
 	
 	if player then player.player = true end
 	if camera then camera.camera = true end
-	entities = json.encode(entities.objects)
+	for entity in world.entities:elements() do
+		if entity.inventory then
+			local capacity = entity.inventory.capacity
+			entity.inventory.capacity = nil -- temporary
+			entity.inventory = {
+				capacity = capacity,
+				items = entity.inventory
+			}
+		end
+	end
+	entities = json.encode(world.entities.objects)
 	if player then player.player = nil end
 	if camera then camera.camera = nil end
+	for entity in world.entities:elements() do
+		if entity.inventory then
+			local capacity = entity.inventory.capacity
+			entity.inventory = entity.inventory.items
+			entity.inventory.capacity = capacity
+		end
+	end
 	
 	local tileInventoriesToSerialise = {}
 	for x = 0, world.tileMapWidth - 1 do
@@ -46,16 +65,16 @@ local function serialise(world, player, camera)
 	
 	local tileIdsByTileType = {} -- for serialising tile data
 	local tileIds = ""
-	for i = 0, #tileTypesById do
-		tileIds = tileIds .. tileTypesById[i].name .. "\n"
-		tileIdsByTileType[tileTypesById[i].name] = i
+	for i = 0, #world.tileTypesById do
+		tileIds = tileIds .. world.tileTypesById[i].name .. "\n"
+		tileIdsByTileType[world.tileTypesById[i].name] = i
 	end
 	
 	-- TODO: Those are tile type names, not tile types
 	backgroundTileDataTable = {}
 	foregroundTileDataTable = {}
-	for x = 0, world.tileMapWidth - 1 do
-		for y = 0, world.tileMapHeight - 1 do
+	for y = 0, world.tileMapHeight - 1 do
+		for x = 0, world.tileMapWidth - 1 do
 			backgroundTileDataTable[#backgroundTileDataTable+1] = string.char(tileIdsByTileType[world.backgroundTiles[x][y].name])
 			foregroundTileDataTable[#foregroundTileDataTable+1] = string.char(tileIdsByTileType[world.foregroundTiles[x][y].name])
 		end

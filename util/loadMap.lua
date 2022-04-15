@@ -7,14 +7,17 @@ local util = require("util")
 
 local csvToBin = require("util.csvToBin")
 
-local function loadMap(path)
-	path = "assets/scenes/" .. path .. "/"
+local function loadMap(location)
+	util.saveDirectory.enable()
+	path = "scenes/" .. location .. "/"
 	local world, player, camera
 	world = {}
 	
 	-- info.json
 	local world = json.decode(love.filesystem.read(path .. "info.json"))
 	world.tint = world.tint or {1, 1, 1}
+	assert(world.location, "info.json for scene " .. location .. " is missing location field")
+	assert(location == world.location, "info.json for scene " .. location .. " is " .. world.location)
 	
 	-- tileInventories.json
 	world.tileInventories = {} -- for dropped items
@@ -43,6 +46,11 @@ local function loadMap(path)
 		if entity.camera then
 			camera = entity
 			entity.camera = nil
+		end
+		if entity.inventory then
+			local capacity = entity.inventory.capacity
+			entity.inventory = entity.inventory.items
+			entity.inventory.capacity = capacity
 		end
 		util.createEntity(world, entity)
 	end
@@ -77,6 +85,7 @@ local function loadMap(path)
 	loadTileData("background", false)
 	loadTileData("foreground", false)
 	
+	util.saveDirectory.disable()
 	return world, player, camera
 end
 
