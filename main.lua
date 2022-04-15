@@ -13,7 +13,7 @@ local util = require("util")
 local contentCanvas
 local colouriseSpriteShader
 
-local world, player, paused, saveFileName
+local world, player, paused, saveFileName, saveLoaded
 local commandDone, commandDone, commandDone
 
 do -- load util
@@ -58,6 +58,7 @@ function love.load(args)
 	end
 	location = love.filesystem.read("saves/" .. saveFileName .. "/playerLocation.txt")
 	util.saveDirectory.disable()
+	saveLoaded = true
 	world, player = util.loadMap(saveFileName, location)
 	ui.clear()
 	paused = false
@@ -67,7 +68,9 @@ function love.load(args)
 end
 
 function love.quit()
-	util.save(saveFileName, world, player)
+	if saveLoaded then
+		util.save(saveFileName, world, player)
+	end
 end
 
 function love.draw()

@@ -13,6 +13,13 @@ local function createEntity(world, entity)
 		entity.inventory = entity.inventory or {}
 		entity.inventory.capacity = entityType.inventoryCapacity
 	end
+	if entityType.defaultSpriteColour and not entity.spriteColour then
+		entity.spriteColour = {
+			entityType.defaultSpriteColour[1],
+			entityType.defaultSpriteColour[2],
+			entityType.defaultSpriteColour[3]
+		}
+	end
 	return entity
 end
 
