@@ -4,5 +4,6 @@
 	{"x": 3, "y": 3, "typeName": "woodenChair", "direction": "left"},
 	{"x": 2, "y": 4, "typeName": "woodenChair", "direction": "up"},
 	{"x": 2, "y": 3, "typeName": "woodenTable"},
-	{"x": 4, "y": 6, "typeName": "woodenDoor"}
+	{"x": 4, "y": 6, "typeName": "woodenDoor"},
+	{"x": 0, "y": 0, "typeName": "berryBush", "hasBerries": true}
 ]

@@ -111,7 +111,7 @@ local function updateEntities(world, player, dt, commandDone)
 		-- try interaction
 		if entity == player then
 			if entity.moveProgress == nil and commandDone.interact then
-				util.tryInteraction(world, entity)
+				util.tryInteraction(world, entity, commandDone.interactOnStandingTile)
 			end
 		end
 	end
