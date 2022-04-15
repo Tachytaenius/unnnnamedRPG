@@ -10,7 +10,7 @@ consts.tileSize = 16
 
 consts.tileInventoryCapacity = 40 -- how much dropped item can fit on one tile?
 
-consts.entityLayersByIndex = {"decals", "furniture", "actors"}
+consts.entityLayersByIndex = {"terrain", "decals", "furniture", "tileInventories", "actors"}
 consts.entityLayerIndicesByName = {}
 for i, v in ipairs(consts.entityLayersByIndex) do
 	consts.entityLayerIndicesByName[v] = i

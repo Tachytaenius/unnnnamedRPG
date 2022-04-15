@@ -68,8 +68,16 @@ function love.draw()
 		for x = minTileX, maxTileX do
 			for y = minTileY, maxTileY do
 				love.graphics.draw(assets.tileTypes[world.backgroundTiles[x][y].name], x * consts.tileSize, y * consts.tileSize)
-				if world.tileInventories[x][y] and #world.tileInventories[x][y] > 0 then
-					love.graphics.draw(assets.tileInventory, x * consts.tileSize, y * consts.tileSize)
+			end
+		end
+		
+		local drewTileInventories = false
+		local function drawTileInventories()
+			for x = minTileX, maxTileX do
+				for y = minTileY, maxTileY do
+					if world.tileInventories[x][y] and #world.tileInventories[x][y] > 0 then
+						love.graphics.draw(assets.tileInventory, x * consts.tileSize, y * consts.tileSize)
+					end
 				end
 			end
 		end
@@ -83,6 +91,12 @@ function love.draw()
 		end)
 		love.graphics.setShader(colouriseSpriteShader)
 		for _, entity in ipairs(entityDrawOrder) do
+			-- do tile inventories if we just passed the tile inventories layer
+			if not drewTileInventories and consts.entityLayerIndicesByName[registry.entityTypes[entity.typeName].layer] >= consts.entityLayerIndicesByName.tileInventories then
+				colouriseSpriteShader:send("colourise", false)
+				drawTileInventories()
+				drewTileInventories = true
+			end
 			local entityAsset = assets.entityTypes[entity.typeName]
 			local spritesheetName = util.getEntitySpritesheetName(entity)
 			local spriteSheetInfo = entityAsset.info.spritesheetInfo[spritesheetName]
@@ -100,6 +114,10 @@ function love.draw()
 				colouriseSpriteShader:send("colourise", false)
 			end
 			love.graphics.draw(image, quad, x, y)
+		end
+		if not drewTileInventories then
+			drawTileInventories() -- if there are no entities
+			drewTileInventories = true
 		end
 		love.graphics.setShader()
 		
