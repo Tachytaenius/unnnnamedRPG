@@ -1,4 +1,5 @@
 local registry = require("registry")
+local util = require("util")
 
 local inventory = {}
 
@@ -61,13 +62,7 @@ function inventory.take(inv, itemType, amountToTake)
 end
 
 function inventory.takeFromStack(inv, stack, amountToTake)
-	local stackIndex
-	for i, inventoryStack in ipairs(inv) do
-		if inventoryStack == stack then
-			stackIndex = i
-			break
-		end
-	end
+	local stackIndex = util.getIndex(inv, stack)
 	if not stackIndex then
 		error("Stack not found in inventory")
 	end

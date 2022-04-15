@@ -30,3 +30,13 @@ do
 		return self.pointers[obj]
 	end
 end
+
+do
+	function love.graphics.multiplyColor(r, g, b)
+		if type(r) == "table" then
+			r, g, b = r[1], r[2], r[3]
+		end
+		local curR, curG, curB = love.graphics.getColor()
+		love.graphics.setColor(r * curR, g * curG, b * curB)
+	end
+end

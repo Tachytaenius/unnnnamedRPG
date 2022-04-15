@@ -10,12 +10,12 @@ local ui = {}
 
 function ui.clear()
 	ui.focusedWindow = nil
-	ui.windows = list()
+	ui.windows = {}
 end
 
 function ui.active()
 	local active = false
-	for window in ui.windows:elements() do
+	for _, window in ipairs(ui.windows) do
 		if window.active then
 			active = true
 			break
@@ -27,13 +27,15 @@ end
 function ui.cancelAll()
 	-- if can't cancel then return false end
 	local i = 1
-	while i <= ui.windows.size do
-		local window = ui.windows:get(i)
+	while i <= #ui.windows do
+		local window = ui.windows[i]
 		if window.active then
-			ui.windows:remove(window)
-		end
-		if window == ui.focusedWindow then
-			ui.focusedWindow = nil
+			table.remove(ui.windows, i)
+			if window == ui.focusedWindow then
+				ui.focusedWindow = nil
+			end
+		else
+			i = i + 1
 		end
 	end
 	return true
@@ -43,7 +45,7 @@ function ui.cancelFocused()
 	-- cancels focused
 	-- if can't cancel then return false end
 	if ui.focusedWindow then
-		ui.windows:remove(ui.focusedWindow)
+		table.remove(ui.windows, util.getIndex(ui.windows, ui.focusedWindow))
 		ui.focusedWindow = ui.focusedWindow.windowToFocusWhenDismissed or nil
 	end
 	return true
@@ -51,7 +53,7 @@ end
 
 function ui.inventory(inventory, displayName, selectionFunction)
 	local window = {}
-	ui.windows:add(window)
+	ui.windows[#ui.windows+1] = window
 	window.selectionFunction = selectionFunction
 	window.type = "inventory"
 	window.items = inventory
@@ -71,7 +73,8 @@ function ui.showEntityInventory(entity, displayName)
 end
 
 function ui.showTransferringInventories(inventoryA, inventoryB, displayNameA, displayNameB)
-	local window = ui.inventory(inventoryA, displayNameA, function(self)
+	local window
+	window = ui.inventory(inventoryA, displayNameA, function(self)
 		if #self.items <= 0 then return end
 		local selectedStack = self.items[self.cursor]
 		local amountToTransfer = 1
@@ -79,7 +82,11 @@ function ui.showTransferringInventories(inventoryA, inventoryB, displayNameA, di
 			local success, error = util.inventory.takeFromStack(self.items, selectedStack, amountToTransfer)
 			if success then
 				util.inventory.give(self.otherItems, selectedStack.type, amountToTransfer)
+			else
+				ui.textBoxWrapper("Not enough of item to transfer")
 			end
+		else
+			ui.textBoxWrapper("Not enough space\nin other inventory\n(" .. window.otherDisplayName .. ") to transfer\n")
 		end
 	end)
 	ui.focusedWindow = window
@@ -91,7 +98,7 @@ end
 
 function ui.textBox(text, x, y, tx, ty, width, height)
 	local window = {}
-	ui.windows:add(window)
+	ui.windows[#ui.windows+1] = window
 	window.x, window.y = x, y
 	window.width, window.height = width, height
 	window.type = "textBox"
@@ -104,7 +111,9 @@ end
 
 function ui.textBoxWrapper(text)
 	local textWidth = assets.font.font:getWidth(text)
-	local textHeight = assets.font.font:getHeight()
+	local endlineCount = select(2, text:gsub("\n", "\n"))
+	if endlineCount == 0 then endlineCount = 1 end
+	local textHeight = assets.font.font:getHeight() * endlineCount
 	local windowX, windowY = (consts.contentWidth - textWidth) / 2, (consts.contentHeight - textHeight) / 2
 	ui.focusedWindow = ui.textBox(text, math.floor(windowX), math.floor(windowY), 0, 0, math.ceil(textWidth+1), math.ceil(textHeight+1))
 end
@@ -144,7 +153,7 @@ function ui.update(dt, world, player, camera, commandDone)
 		end
 	end
 	
-	for window in ui.windows:elements() do
+	for _, window in ipairs(ui.windows) do
 		if window == ui.focusedWindow then
 			if window.type == "inventory" or window.type == "transferInventories" then
 				if uiCommandDone.confirm then
@@ -192,16 +201,24 @@ local function drawText(text, x, y, yLines)
 	-- Maybe do wrapping and return new yLines deopending on how many times it wrapped?
 end
 
+local function uiSetColor(window, r, g, b)
+	love.graphics.setColor(r, g, b)
+	if window ~= ui.focusedWindow and not window.dontDarken then
+		love.graphics.multiplyColor(0.75, 0.75, 0.75)
+	end
+end
+
 function ui.draw()
-	for window in ui.windows:elements() do
+	for _, window in ipairs(ui.windows) do
 		love.graphics.push("all")
 		love.graphics.origin()
 		love.graphics.translate(window.x, window.y)
-		love.graphics.setColor(0.25, 0.25, 0.25)
-		love.graphics.rectangle("line", 0, 0, window.width + 1, window.height + 1)
-		love.graphics.setColor(0.5, 0.5, 0.5)
+		uiSetColor(window, 0.25, 0.25, 0.25)
+		love.graphics.rectangle("fill", -3, -3, window.width + 6, window.height + 6)
+		uiSetColor(window, 0.5, 0.5, 0.5)
 		love.graphics.rectangle("fill", 0, 0, window.width, window.height)
-		love.graphics.setColor(1, 1, 1)
+		uiSetColor(window, 1, 1, 1)
+		if window ~= ui.focusedWindow then love.graphics.multiplyColor(0.75, 0.75, 0.75) end
 		if window.type == "textBox" then
 			drawText(window.text, window.textX, window.textY, 0)
 		end
