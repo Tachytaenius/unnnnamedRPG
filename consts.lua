@@ -8,6 +8,7 @@ consts.contentHeight = 144
 
 consts.tileSize = 16
 
+consts.startingScene = "testScene"
 consts.tileInventoryCapacity = 40 -- how much dropped item can fit on one tile?
 
 consts.entityLayersByIndex = {"terrain", "decals", "furniture", "tileInventories", "actors"}

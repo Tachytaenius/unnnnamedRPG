@@ -1,4 +1,5 @@
 local registry = require("registry")
+local util = require("util")
 
 local function checkCollision(world, x, y, exclude)
 	if x < 0 or x >= world.tileMapWidth or y < 0 or y >= world.tileMapHeight then
@@ -14,7 +15,7 @@ local function checkCollision(world, x, y, exclude)
 				return true
 			end
 			if entity.moveDirection then
-				local ex2, ey2 = translateByDirection(entity.x, entity.y, entity.moveDirection)
+				local ex2, ey2 = util.translateByDirection(entity.x, entity.y, entity.moveDirection)
 				if x == ex2 and y == ey2 then
 					return true
 				end

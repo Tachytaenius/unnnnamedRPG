@@ -10,6 +10,12 @@ local animatedTiles = require("animatedTiles")
 local ui = require("ui")
 local util = require("util")
 
+local contentCanvas
+local colouriseSpriteShader
+
+local world, player, paused, saveFileName
+local commandDone, commandDone, commandDone
+
 do -- load util
 	-- TODO: directories --> tables
 	for i, itemName in ipairs(love.filesystem.getDirectoryItems("util")) do
@@ -18,13 +24,21 @@ do -- load util
 			util[moduleName] = require("util." .. moduleName)
 		end
 	end
+	-- add in functions using main's scope
+	function util.changePlayer(newPlayer)
+		player = newPlayer
+	end
+	function util.changeWorld(newWorld)
+		world = newWorld
+	end
 end
 
-local contentCanvas
-local colouriseSpriteShader
-
-local world, player, paused
-local commandDone, commandDone, commandDone
+local function newSave()
+	love.filesystem.createDirectory("saves/" .. saveFileName)
+	local location = consts.startingScene
+	love.filesystem.write("saves/" .. saveFileName .. "/playerLocation.txt", location)
+	return location
+end
 
 function love.load(args)
 	if args[1] == "convert" then
@@ -36,7 +50,15 @@ function love.load(args)
 	util.recreateWindow()
 	assets.load()
 	animatedTiles:reset()
-	world, player = util.loadMap("testScene")
+	saveFileName = "save1"
+	util.saveDirectory.enable()
+	local location
+	if not love.filesystem.getInfo("saves/" .. saveFileName) then
+		location = newSave()
+	end
+	location = love.filesystem.read("saves/" .. saveFileName .. "/playerLocation.txt")
+	util.saveDirectory.disable()
+	world, player = util.loadMap(saveFileName, location)
 	ui.clear()
 	paused = false
 	contentCanvas = love.graphics.newCanvas(consts.contentWidth, consts.contentHeight)
@@ -45,7 +67,7 @@ function love.load(args)
 end
 
 function love.quit()
-	util.save(world, player)
+	util.save(saveFileName, world, player)
 end
 
 function love.draw()
@@ -144,6 +166,10 @@ function love.keypressed(key)
 		if type(key2) == "string" and consts.commands[command] == "pressed" and key == key2 then
 			commandDone[command] = true
 		end
+	end
+	-- TEMP, this should not be here
+	if key == "c" then
+		util.changeMap(saveFileName, "stoneHouse", 3, 3, "up", world, player)
 	end
 end
 

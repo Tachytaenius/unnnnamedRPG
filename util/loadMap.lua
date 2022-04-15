@@ -7,14 +7,20 @@ local util = require("util")
 
 local csvToBin = require("util.csvToBin")
 
-local function loadMap(location)
+local function loadMap(saveFileName, location)
 	util.saveDirectory.enable()
-	path = "scenes/" .. location .. "/"
+	local path = "saves/" .. saveFileName .. "/scenes/" .. location .. "/"
 	local world, player
 	world = {}
 	
 	-- info.json
-	local world = json.decode(love.filesystem.read(path .. "info.json"))
+	local infoJson = love.filesystem.read(path .. "info.json")
+	if not infoJson then
+		util.saveDirectory.disable()
+		path = "assets/defaultScenes/" .. location .. "/"
+		infoJson = love.filesystem.read(path .. "info.json")
+	end
+	local world = json.decode(infoJson)
 	world.tint = world.tint or {1, 1, 1}
 	assert(world.location, "info.json for scene " .. location .. " is missing location field")
 	assert(location == world.location, "info.json for scene " .. location .. " is " .. world.location)
