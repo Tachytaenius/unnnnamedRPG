@@ -167,10 +167,6 @@ function love.keypressed(key)
 			commandDone[command] = true
 		end
 	end
-	-- TEMP, this should not be here
-	if key == "c" then
-		util.changeMap(saveFileName, "stoneHouse", 3, 3, "up", world, player)
-	end
 end
 
 function love.keyreleased(key)
