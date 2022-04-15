@@ -117,6 +117,12 @@ local function updateEntities(world, player, dt, commandDone)
 			entity.walkCyclePos = entity.walkCyclePos or entity.nextWalkCycleStartPos
 			entity.walkCyclePos = (entity.walkCyclePos + dt / entityType.walkCycleTime) % 1
 		end
+		-- delete items from certain containers
+		if entityType.deletesItems and entity.inventory then
+			while #entity.inventory > 0 do
+				table.remove(entity.inventory, 1)
+			end
+		end
 		-- try interaction
 		if entity == player then
 			if entity.moveProgress == nil and commandDone.interact then

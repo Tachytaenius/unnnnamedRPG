@@ -1,0 +1,7 @@
+{
+	"container": true,
+	"deletesItems": true,
+	"layer": "furniture",
+	"containerDisplayName": "Trash",
+	"inventoryCapacity": 100
+}

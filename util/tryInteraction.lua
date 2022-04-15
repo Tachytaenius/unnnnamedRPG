@@ -37,6 +37,8 @@ local function tryInteraction(world, player, camera, entity, onEntityTile)
 					end
 				end
 			end
+		elseif interacteeType.container then
+			ui.showTransferringInventories(player.inventory, interactee.inventory, entity == player and "Player" or "Entity", interacteeType.containerDisplayName)
 		end
 	end
 end

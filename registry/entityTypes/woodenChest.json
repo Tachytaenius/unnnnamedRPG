@@ -1,0 +1,6 @@
+{
+	"container": true,
+	"layer": "furniture",
+	"containerDisplayName": "Chest",
+	"inventoryCapacity": 200
+}
