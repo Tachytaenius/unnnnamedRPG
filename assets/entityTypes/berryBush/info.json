@@ -1,7 +1,7 @@
 {
 	"defaultSpritesheetName": "berries",
-	"withSpritesheetName": "berries",
-	"withoutSpritesheetName": "none",
+	"withFruitSpritesheetName": "berries",
+	"withoutFruitSpritesheetName": "none",
 	"spritesheetInfo": {
 		"berries": {
 			"width": 16, "height": 16,

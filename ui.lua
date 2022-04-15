@@ -78,7 +78,9 @@ function ui.showTransferringInventories(inventoryA, inventoryB, displayNameA, di
 		if #self.items <= 0 then return end
 		local selectedStack = self.items[self.cursor]
 		local amountToTransfer = 1
-		if util.inventory.getAmount(self.otherItems) + amountToTransfer * registry.itemTypes[selectedStack.type].size <= self.otherItems.capacity then
+		local inventoryAmount = util.inventory.getAmount(self.otherItems)
+		local stackSize = registry.itemTypes[selectedStack.type].size
+		if inventoryAmount + amountToTransfer * stackSize <= self.otherItems.capacity then
 			local success, error = util.inventory.takeFromStack(self.items, selectedStack, amountToTransfer)
 			if success then
 				util.inventory.give(self.otherItems, selectedStack.type, amountToTransfer)
@@ -86,7 +88,7 @@ function ui.showTransferringInventories(inventoryA, inventoryB, displayNameA, di
 				ui.textBoxWrapper("Not enough of item to transfer")
 			end
 		else
-			ui.textBoxWrapper("Not enough space\nin other inventory\n(" .. window.otherDisplayName .. ") to transfer\n")
+			ui.textBoxWrapper("Not enough space\nin other inventory\n(" .. window.otherDisplayName .. ") to transfer,\nneed " .. stackSize - (self.otherItems.capacity - inventoryAmount) .. " more\n")
 		end
 	end)
 	ui.focusedWindow = window

@@ -1,5 +1,7 @@
 {
-	"bush": true,
+	"fruitPlant": true,
 	"layer": "terrain",
-	"berryType": "berry"
+	"fruitType": "berry",
+	"fruitCount": 2,
+	"fruitGrowthTime": 300
 }

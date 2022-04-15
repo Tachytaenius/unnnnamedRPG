@@ -3,7 +3,7 @@ local ui = require("ui")
 
 local registry = require("registry")
 
-local function tryInteraction(world, entity, onEntityTile)
+local function tryInteraction(world, player, camera, entity, onEntityTile)
 	local entityType = registry.entityTypes[entity.typeName]
 	local interactionTileX, interactionTileY
 	if onEntityTile then
@@ -22,15 +22,18 @@ local function tryInteraction(world, entity, onEntityTile)
 			else
 				interactee.open = true
 			end
-		elseif interacteeType.bush then
-			if interactee.hasBerries then
-				local amountToGet = 1
-				local success, error = util.inventory.give(entity.inventory, interacteeType.berryType, amountToGet)
+		elseif interacteeType.fruitPlant then
+			if interactee.hasFruit then
+				local amountToGet = interacteeType.fruitCount
+				local success, error = util.inventory.give(entity.inventory, interacteeType.fruitType, amountToGet)
 				if success then
-					interactee.hasBerries = false
-				else
+					interactee.hasFruit = false
+					interactee.fruitGrowthTimer = interacteeType.fruitGrowthTime
+				elseif entity == player then
 					if error == "notEnoughSpace" then
-						ui.textBoxWrapper("Not enough space\nin inventory for\nthe item(s)\n")
+						local inventorySpace = entity.inventory.capacity - util.inventory.getAmount(entity.inventory)
+						local spaceYieldWouldOccupy = amountToGet * registry.itemTypes[interacteeType.fruitType].size
+						ui.textBoxWrapper("Not enough space\nin inventory for\nthe item(s), need\n" .. spaceYieldWouldOccupy - inventorySpace .. " more\n")
 					end
 				end
 			end

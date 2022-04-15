@@ -101,6 +101,15 @@ local function updateEntities(world, player, dt, commandDone)
 				entity.turnMovementDelayTimer = nil
 			end
 		end
+		if entity.fruitGrowthTimer then
+			entity.fruitGrowthTimer = entity.fruitGrowthTimer - dt
+			if entity.fruitGrowthTimer <= 0 then
+				if entityType.fruitPlant then
+					entity.hasFruit = true
+					entity.fruitGrowthTimer = nil
+				end
+			end
+		end
 		-- do walk cycle
 		if entity.moveProgress == nil then
 			entity.walkCyclePos = nil
@@ -111,7 +120,7 @@ local function updateEntities(world, player, dt, commandDone)
 		-- try interaction
 		if entity == player then
 			if entity.moveProgress == nil and commandDone.interact then
-				util.tryInteraction(world, entity, commandDone.interactOnStandingTile)
+				util.tryInteraction(world, player, camera, entity, commandDone.aimOnStandingTile)
 			end
 		end
 	end
