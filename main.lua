@@ -20,8 +20,10 @@ do -- load util
 	end
 end
 
-local world, player, camera, paused
 local contentCanvas
+local colouriseSpriteShader
+
+local world, player, camera, paused
 local commandDone, commandDone, commandDone
 
 function love.load(args)
@@ -38,11 +40,11 @@ function love.load(args)
 	ui.clear()
 	paused = false
 	contentCanvas = love.graphics.newCanvas(consts.contentWidth, consts.contentHeight)
+	colouriseSpriteShader = love.graphics.newShader("shaders/colouriseSprite.glsl")
 	commandDone = {}
 end
 
 function love.quit()
-	print(world.location)
 	util.save(world, player, camera)
 end
 
@@ -79,18 +81,27 @@ function love.draw()
 		table.sort(entityDrawOrder, function(a, b)
 			return consts.entityLayerIndicesByName[registry.entityTypes[a.typeName].layer] < consts.entityLayerIndicesByName[registry.entityTypes[b.typeName].layer]
 		end)
+		love.graphics.setShader(colouriseSpriteShader)
 		for _, entity in ipairs(entityDrawOrder) do
 			local entityAsset = assets.entityTypes[entity.typeName]
 			local spritesheetName = util.getEntitySpritesheetName(entity)
+			local spriteSheetInfo = entityAsset.info.spritesheetInfo[spritesheetName]
 			local quad = util.getEntityQuad(entity, spritesheetName)
 			local image = entityAsset[spritesheetName]
 			local x, y = util.translateByDirection(entity.x, entity.y, entity.moveDirection, entity.moveProgress)
 			x, y = x * consts.tileSize, y * consts.tileSize
-			x = x + consts.tileSize / 2 - entityAsset.info.spritesheetInfo[spritesheetName].width / 2
-			y = y + consts.tileSize / 2 - entityAsset.info.spritesheetInfo[spritesheetName].height / 2
+			x = x + consts.tileSize / 2 - spriteSheetInfo.width / 2
+			y = y + consts.tileSize / 2 - spriteSheetInfo.height / 2
 			x, y = math.floor(x), math.floor(y) -- stop bleeding
+			if spriteSheetInfo.colourised then
+				colouriseSpriteShader:send("spriteColour", entity.spriteColour)
+				colouriseSpriteShader:send("colourise", true)
+			else
+				colouriseSpriteShader:send("colourise", false)
+			end
 			love.graphics.draw(image, quad, x, y)
 		end
+		love.graphics.setShader()
 		
 		for x = minTileX, maxTileX do
 			for y = minTileY, maxTileY do
