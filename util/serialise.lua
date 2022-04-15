@@ -2,7 +2,7 @@ local json = require("lib.json")
 
 local consts = require("consts")
 
-local function serialise(world, player, camera)
+local function serialise(world, player)
 	-- backup and remove info that is serialised into other files
 	do
 		local entities = world.entities
@@ -26,7 +26,6 @@ local function serialise(world, player, camera)
 	end
 	
 	if player then player.player = true end
-	if camera then camera.camera = true end
 	for entity in world.entities:elements() do
 		if entity.inventory then
 			local capacity = entity.inventory.capacity
@@ -39,7 +38,6 @@ local function serialise(world, player, camera)
 	end
 	entities = json.encode(world.entities.objects)
 	if player then player.player = nil end
-	if camera then camera.camera = nil end
 	for entity in world.entities:elements() do
 		if entity.inventory then
 			local capacity = entity.inventory.capacity

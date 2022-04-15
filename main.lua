@@ -23,7 +23,7 @@ end
 local contentCanvas
 local colouriseSpriteShader
 
-local world, player, camera, paused
+local world, player, paused
 local commandDone, commandDone, commandDone
 
 function love.load(args)
@@ -36,7 +36,7 @@ function love.load(args)
 	util.recreateWindow()
 	assets.load()
 	animatedTiles:reset()
-	world, player, camera = util.loadMap("testScene")
+	world, player = util.loadMap("testScene")
 	ui.clear()
 	paused = false
 	contentCanvas = love.graphics.newCanvas(consts.contentWidth, consts.contentHeight)
@@ -45,7 +45,7 @@ function love.load(args)
 end
 
 function love.quit()
-	util.save(world, player, camera)
+	util.save(world, player)
 end
 
 function love.draw()
@@ -53,8 +53,8 @@ function love.draw()
 	love.graphics.setCanvas(contentCanvas)
 	love.graphics.clear()
 	local cw, ch = contentCanvas:getDimensions()
-	if camera then
-		local camX, camY = util.translateByDirection(camera.x, camera.y, camera.moveDirection, camera.moveProgress)
+	if player then
+		local camX, camY = util.translateByDirection(player.x, player.y, player.moveDirection, player.moveProgress)
 		camX, camY = (camX + 0.5) * consts.tileSize, (camY + 0.5) * consts.tileSize
 		camX, camY = math.floor(camX), math.floor(camY)
 		love.graphics.translate(-camX, -camY)
@@ -214,7 +214,7 @@ function love.update(dt)
 		util.recreateWindow()
 	end
 	
-	ui.update(dt, world, player, camera, commandDone)
+	ui.update(dt, world, player, commandDone)
 	
 	if not ui.active() and not paused then
 		-- Actual content update

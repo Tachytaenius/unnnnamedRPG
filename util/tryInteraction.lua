@@ -3,7 +3,7 @@ local ui = require("ui")
 
 local registry = require("registry")
 
-local function tryInteraction(world, player, camera, entity, onEntityTile)
+local function tryInteraction(world, player, entity, onEntityTile)
 	local entityType = registry.entityTypes[entity.typeName]
 	local interactionTileX, interactionTileY
 	if onEntityTile then

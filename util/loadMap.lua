@@ -10,7 +10,7 @@ local csvToBin = require("util.csvToBin")
 local function loadMap(location)
 	util.saveDirectory.enable()
 	path = "scenes/" .. location .. "/"
-	local world, player, camera
+	local world, player
 	world = {}
 	
 	-- info.json
@@ -42,10 +42,6 @@ local function loadMap(location)
 			-- extendable for multiplayer
 			player = entity
 			entity.player = nil
-		end
-		if entity.camera then
-			camera = entity
-			entity.camera = nil
 		end
 		if entity.inventory then
 			local capacity = entity.inventory.capacity
@@ -86,7 +82,7 @@ local function loadMap(location)
 	loadTileData("foreground", false)
 	
 	util.saveDirectory.disable()
-	return world, player, camera
+	return world, player
 end
 
 return loadMap

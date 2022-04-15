@@ -1,7 +1,7 @@
 local util = require("util")
 
-local function save(world, player, camera)
-	local info, entities, tileInventories, tileIds, backgroundTileData, foregroundTileData = util.serialise(world, player, camera)
+local function save(world, player)
+	local info, entities, tileInventories, tileIds, backgroundTileData, foregroundTileData = util.serialise(world, player)
 	local path = "scenes/" .. world.location .. "/"
 	util.saveDirectory.enable()
 	love.filesystem.write(path .. "info.json", info)

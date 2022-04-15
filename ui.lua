@@ -120,7 +120,7 @@ function ui.textBoxWrapper(text)
 	ui.focusedWindow = ui.textBox(text, math.floor(windowX), math.floor(windowY), 0, 0, math.ceil(textWidth+1), math.ceil(textHeight+1))
 end
 
-function ui.update(dt, world, player, camera, commandDone)
+function ui.update(dt, world, player, commandDone)
 	-- Only allow commands to be registered once per frame
 	local commandDoneCopy = {}
 	for k, v in pairs(commandDone) do
