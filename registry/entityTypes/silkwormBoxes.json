@@ -1,0 +1,11 @@
+{
+	"solid": true,
+	"layer": "furniture",
+	"container": true,
+	"containerDisplayName": "Silk Farm",
+	"inventoryCapacity": 30,
+	"producerProductFarm": true,
+	"producer": "silkworm",
+	"product": "silkThread",
+	"productionTime": 600
+}

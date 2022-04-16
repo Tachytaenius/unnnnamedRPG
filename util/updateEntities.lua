@@ -116,7 +116,27 @@ local function updateEntities(world, player, dt, commandDone, saveFileName)
 			if entity.fruitGrowthTimer <= 0 then
 				if entityType.fruitPlant then
 					entity.hasFruit = true
-					entity.fruitGrowthTimer = nil
+				end
+				entity.fruitGrowthTimer = nil
+			end
+		end
+		if entityType.producerProductFarm then
+			if entity.inventory then
+				local producerAmount = util.inventory.getCount(entity.inventory, entityType.producer)
+				local hasProducer = producerAmount > 0
+				if hasProducer then
+					local newProductionTime = entityType.productionTime / producerAmount
+					entity.productionTimer = entity.productionTimer or newProductionTime
+					entity.productionTimer = entity.productionTimer - dt
+					if entity.productionTimer <= 0 then
+						if util.inventory.give(entity.inventory, entityType.product, 1) then
+							entity.productionTimer = newProductionTime
+						else
+							entity.productionTimer = nil
+						end
+					end
+				else
+					entity.productionTimer = nil
 				end
 			end
 		end

@@ -78,7 +78,7 @@ function ui.showTransferringInventories(inventoryA, inventoryB, displayNameA, di
 		if #self.items <= 0 then return end
 		local selectedStack = self.items[self.cursor]
 		local amountToTransfer = 1
-		local inventoryAmount = util.inventory.getAmount(self.otherItems)
+		local inventoryAmount = util.inventory.getCountSize(self.otherItems)
 		local stackSize = registry.itemTypes[selectedStack.type].size
 		if inventoryAmount + amountToTransfer * stackSize <= self.otherItems.capacity then
 			local success, error = util.inventory.takeFromStack(self.items, selectedStack, amountToTransfer)
@@ -236,7 +236,7 @@ function ui.draw()
 				end
 			end
 			-- do title
-			drawText(window.displayName .. " (" .. util.inventory.getAmount(window.items) .. "/" .. window.items.capacity .. ") " .. extraText, 0, 0, 0)
+			drawText(window.displayName .. " (" .. util.inventory.getCountSize(window.items) .. "/" .. window.items.capacity .. ") " .. extraText, 0, 0, 0)
 			-- more above indicator
 			if window.viewOffset > 0 then
 				love.graphics.draw(assets.inventory.upMoreIndicator, 8, 1 * assets.font.font:getHeight())

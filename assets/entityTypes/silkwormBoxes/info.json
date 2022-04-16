@@ -1,0 +1,29 @@
+{
+	"defaultSpritesheetName": "empty",
+	"withoutProducerSpritesheetNames": {
+		"withoutProduct": "empty",
+		"withProduct": "silk"
+	},
+	"withProducerSpritesheetNames": {
+		"withoutProduct": "worms",
+		"withProduct": "wormsSilk"
+	},
+	"spritesheetInfo": {
+		"empty": {
+			"width": 16, "height": 16,
+			"offsetX": 0, "offsetY": 0
+		},
+		"worms": {
+			"width": 16, "height": 16,
+			"offsetX": 0, "offsetY": 0
+		},
+		"silk": {
+			"width": 16, "height": 16,
+			"offsetX": 0, "offsetY": 0
+		},
+		"wormsSilk": {
+			"width": 16, "height": 16,
+			"offsetX": 0, "offsetY": 0
+		}
+	}
+}

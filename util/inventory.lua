@@ -3,7 +3,7 @@ local util = require("util")
 
 local inventory = {}
 
-function inventory.getAmount(inv, itemType)
+function inventory.getCountSize(inv, itemType)
 	local total = 0
 	for _, stack in ipairs(inv) do
 		if not itemType or stack.type == itemType then
@@ -13,9 +13,19 @@ function inventory.getAmount(inv, itemType)
 	return total
 end
 
+function inventory.getCount(inv, itemType)
+	local total = 0
+	for _, stack in ipairs(inv) do
+		if not itemType or stack.type == itemType then
+			total = total + stack.count
+		end
+	end
+	return total
+end
+
 function inventory.give(inv, itemType, amountToGive)
 	assert(amountToGive >= 0, "Can't give negative amount!")
-	local currentInventorySize = inventory.getAmount(inv)
+	local currentInventorySize = inventory.getCountSize(inv)
 	if currentInventorySize + amountToGive * registry.itemTypes[itemType].size > inv.capacity then
 		return false, "notEnoughSpace"
 	end
@@ -36,7 +46,7 @@ end
 
 function inventory.take(inv, itemType, amountToTake)
 	assert(amountToTake >= 0, "Can't take negative amount!")
-	local currentAmount = inventory.getAmount(inv, itemType)
+	local currentAmount = inventory.getCount(inv, itemType)
 	if currentAmount - amountToTake < 0 then
 		return false, "notEnoughOfItem"
 	end

@@ -31,7 +31,7 @@ local function tryInteraction(world, player, entity, onEntityTile)
 					interactee.fruitGrowthTimer = interacteeType.fruitGrowthTime
 				elseif entity == player then
 					if error == "notEnoughSpace" then
-						local inventorySpace = entity.inventory.capacity - util.inventory.getAmount(entity.inventory)
+						local inventorySpace = entity.inventory.capacity - util.inventory.getCountSize(entity.inventory)
 						local spaceYieldWouldOccupy = amountToGet * registry.itemTypes[interacteeType.fruitType].size
 						ui.textBoxWrapper("Not enough space\nin inventory for\nthe item(s), need\n" .. spaceYieldWouldOccupy - inventorySpace .. " more\n")
 					end
