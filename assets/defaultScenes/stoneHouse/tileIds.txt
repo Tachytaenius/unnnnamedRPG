@@ -1,0 +1,8 @@
+nothing
+dirt
+grass
+woodenPlanks
+woodenWallTopOnly
+woodenWallFront
+stoneBrickWall
+stoneTileFloor

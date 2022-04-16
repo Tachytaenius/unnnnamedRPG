@@ -27,7 +27,7 @@ local function converters(args) -- this splits off from love.load
 				end
 			end
 		end
-		-- info.json and tileIds.txt assumed to already be present
+		-- info.json, tileInventories.json, warps.json, and tileIds.txt assumed to already be present
 		local btd -- backgroundTileData.bin
 		local ftd -- foregroundTileData.bin
 		local ent -- entities.json

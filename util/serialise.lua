@@ -10,11 +10,13 @@ local function serialise(world, player)
 		local backgroundTiles = world.backgroundTiles
 		local foregroundTiles = world.foregroundTiles
 		local tileTypesById = world.tileTypesById
+		local warps = world.warps
 		world.entities = nil
 		world.tileInventories = nil
 		world.backgroundTiles = nil
 		world.foregroundTiles = nil
 		world.tileTypesById = nil
+		world.warps = nil
 		-- serialise
 		info = json.encode(world)
 		-- restore
@@ -23,9 +25,10 @@ local function serialise(world, player)
 		world.backgroundTiles = backgroundTiles
 		world.foregroundTiles = foregroundTiles
 		world.tileTypesById = tileTypesById
+		world.warps = warps
 	end
 	
-	if player then player.player = true end
+	if player then player.player = true end -- temporary
 	for entity in world.entities:elements() do
 		if entity.inventory then
 			local capacity = entity.inventory.capacity
@@ -80,7 +83,9 @@ local function serialise(world, player)
 	backgroundTileData = table.concat(backgroundTileDataTable)
 	foregroundTileData = table.concat(foregroundTileDataTable)
 	
-	return info, entities, tileInventories, tileIds, backgroundTileData, foregroundTileData
+	warps = json.encode(world.warps)
+	
+	return info, entities, tileInventories, tileIds, backgroundTileData, foregroundTileData, warps
 end
 
 return serialise

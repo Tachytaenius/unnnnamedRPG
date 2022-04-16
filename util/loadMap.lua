@@ -87,6 +87,9 @@ local function loadMap(saveFileName, location)
 	loadTileData("background", false)
 	loadTileData("foreground", false)
 	
+	-- warps.json
+	world.warps = json.decode(love.filesystem.read(path .. "warps.json"))
+	
 	util.saveDirectory.disable()
 	return world, player
 end
