@@ -10,6 +10,7 @@ consts.tileSize = 16
 
 consts.startingScene = "testScene"
 consts.tileInventoryCapacity = 40 -- how much dropped item can fit on one tile?
+consts.warpFadeTime = 0.5
 
 consts.entityLayersByIndex = {"terrain", "decals", "furniture", "tileInventories", "actors"}
 consts.entityLayerIndicesByName = {}

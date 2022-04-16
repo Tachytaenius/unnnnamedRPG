@@ -13,7 +13,7 @@ local util = require("util")
 local contentCanvas
 local colouriseSpriteShader
 
-local world, player, paused, saveFileName, saveLoaded
+local world, player, paused, saveFileName, saveLoaded, fadeTime, fadeTimer, fadeMiddleFunction
 local commandDone, commandDone, commandDone
 
 do -- load util
@@ -30,6 +30,11 @@ do -- load util
 	end
 	function util.changeWorld(newWorld)
 		world = newWorld
+	end
+	function util.fade(time, middleFunction)
+		fadeTime = time
+		fadeMiddleFunction = middleFunction
+		fadeTimer = fadeTime
 	end
 end
 
@@ -158,10 +163,20 @@ function love.draw()
 	local ww, wh = love.graphics.getDimensions()
 	local scale = settings.graphics.contentScale -- TEMP
 	cw, ch = cw * scale, ch * scale
+	if fadeTimer then
+		local portion = fadeTimer / fadeTime
+		local grey
+		if portion > 0.5 then
+			grey = (portion - 0.5) * 2
+		else
+			grey = 1 - portion * 2
+		end
+		love.graphics.setColor(grey, grey, grey)
+	end
 	love.graphics.draw(contentCanvas, (ww - cw) / 2, (wh - ch) / 2, 0, scale)
 	-- love.graphics.setColor(0.2, 0.2, 0.2)
 	-- love.graphics.rectangle("line", (ww - cw) / 2 - 1, (wh - ch) / 2 - 1, cw + 2, ch + 2)
-	-- love.graphics.setColor(1, 1, 1)
+	love.graphics.setColor(1, 1, 1)
 end
 
 function love.keypressed(key)
@@ -239,12 +254,23 @@ function love.update(dt)
 		util.recreateWindow()
 	end
 	
-	ui.update(dt, world, player, commandDone)
-	
-	if not ui.active() and not paused then
-		-- Actual content update
-		util.updateEntities(world, player, dt, commandDone, saveFileName)
-		animatedTiles:update(dt)
+	if fadeTimer then
+		fadeTimer = fadeTimer - dt
+		if fadeTimer / fadeTime <= 0.5 and fadeMiddleFunction then
+			fadeMiddleFunction()
+			fadeMiddleFunction = nil
+		end
+		if fadeTimer <= 0 then
+			fadeTimer, fadeTime = nil, nil
+		end
+	else
+		ui.update(dt, world, player, commandDone)
+		
+		if not ui.active() and not paused then
+			-- Actual content update
+			util.updateEntities(world, player, dt, commandDone, saveFileName)
+			animatedTiles:update(dt)
+		end
 	end
 	
 	commandDone = {}

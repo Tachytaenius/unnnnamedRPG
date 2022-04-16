@@ -1,5 +1,6 @@
 local util = require("util")
 local registry = require("registry")
+local consts = require("consts")
 
 local function updateEntities(world, player, dt, commandDone, saveFileName)
 	for entity in world.entities:elements() do
@@ -19,8 +20,10 @@ local function updateEntities(world, player, dt, commandDone, saveFileName)
 				if entity == player then
 					for _, warp in ipairs(world.warps) do
 						if warp.x == player.x and warp.y == player.y then
-							util.changeMap(saveFileName, warp.location, warp.newX, warp.newY, warp.direction, world, player)
-							util.save(saveFileName, world, player)
+							util.fade(consts.warpFadeTime, function()
+								util.changeMap(saveFileName, warp.location, warp.newX, warp.newY, warp.direction, world, player)
+								util.save(saveFileName, world, player)
+							end)
 						end
 					end
 				end
