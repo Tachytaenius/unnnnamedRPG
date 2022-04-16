@@ -1,7 +1,7 @@
 local util = require("util")
 local registry = require("registry")
 
-local function updateEntities(world, player, dt, commandDone)
+local function updateEntities(world, player, dt, commandDone, saveFileName)
 	for entity in world.entities:elements() do
 		local entityType = registry.entityTypes[entity.typeName]
 		entity.prev = setmetatable({}, getmetatable(entity.prev) or {__index = entity})
@@ -10,10 +10,20 @@ local function updateEntities(world, player, dt, commandDone)
 		if entity.moveProgress then
 			entity.moveProgress = entity.moveProgress + dt / entityType.moveTime
 			if entity.moveProgress >= 1 then
+				-- movement finished
 				entity.x, entity.y = util.translateByDirection(entity.x, entity.y, entity.moveDirection)
 				entity.moveProgress = nil
 				entity.moveDirection = nil
 				entity.nextWalkCycleStartPos = (not entityType.alternateWalkCycleStartPos) and 0 or entity.nextWalkCycleStartPos == 0 and 0.5 or 0
+				-- if this is the player, try warping
+				if entity == player then
+					for _, warp in ipairs(world.warps) do
+						if warp.x == player.x and warp.y == player.y then
+							util.changeMap(saveFileName, warp.location, warp.newX, warp.newY, warp.direction, world, player)
+							util.save(saveFileName, world, player)
+						end
+					end
+				end
 			end
 		end
 		-- if we're not moving, see if we are to move

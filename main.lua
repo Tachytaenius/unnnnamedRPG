@@ -243,7 +243,7 @@ function love.update(dt)
 	
 	if not ui.active() and not paused then
 		-- Actual content update
-		util.updateEntities(world, player, dt, commandDone)
+		util.updateEntities(world, player, dt, commandDone, saveFileName)
 		animatedTiles:update(dt)
 	end
 	
