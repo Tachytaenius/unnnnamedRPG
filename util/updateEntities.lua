@@ -14,7 +14,7 @@ local function updateEntities(world, player, dt, commandDone, saveFileName)
 				entity.x, entity.y = util.translateByDirection(entity.x, entity.y, entity.moveDirection)
 				entity.moveProgress = nil
 				entity.moveDirection = nil
-				entity.nextWalkCycleStartPos = (not entityType.alternateWalkCycleStartPos) and 0 or entity.nextWalkCycleStartPos == 0 and 0.5 or 0
+				entity.nextWalkCycleStartPos = not entityType.alternateWalkCycleStartPos and 0 or entity.nextWalkCycleStartPos == 0 and 0.5 or 0
 				-- if this is the player, try warping
 				if entity == player then
 					for _, warp in ipairs(world.warps) do
