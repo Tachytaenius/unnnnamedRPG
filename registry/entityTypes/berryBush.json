@@ -6,5 +6,5 @@
 	"fruitCount": 3,
 	"fruitGrowthTime": 300,
 	"toolTypeRequired": "axe",
-	"maxHP": 25
+	"maxHealth": 25
 }

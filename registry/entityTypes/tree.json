@@ -7,5 +7,5 @@
 	"fruitGrowthTime": 600,
 	"hasStumpForm": true,
 	"toolTypeRequired": "axe",
-	"maxHP": 100
+	"maxHealth": 100
 }

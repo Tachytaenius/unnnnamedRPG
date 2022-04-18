@@ -21,6 +21,9 @@ local function createEntity(world, entity)
 			entityType.defaultSpriteColour[3]
 		}
 	end
+	if entityType.maxHealth then
+		entity.health = entity.health or entity.maxHealth
+	end
 	return entity
 end
 
