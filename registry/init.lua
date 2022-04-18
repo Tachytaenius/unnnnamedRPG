@@ -3,7 +3,8 @@ local json = require("lib.json")
 local registry = {
 	entityTypes = {},
 	tileTypes = {}, numTileTypes = 0,
-	itemTypes = {}
+	itemTypes = {},
+	recipes = {}, recipeClasses = {}
 }
 
 local function traverse(registryTable, path, createFromJson, registryPathPrefixLength)
@@ -38,8 +39,25 @@ local function createItemType(jsonData, path)
 	return jsonData
 end
 
+local function createRecipe(jsonData, path)
+	assert(#jsonData.reagents > 0, "Recipe " .. path .. " must have at least one reagent")
+	for i, stack in ipairs(jsonData.reagents) do
+		assert(stack.count > 0, "Stack " .. i .. " in recipe " .. path .. " must have a count greater than 0")
+	end
+	
+	local classTable = registry.recipeClasses[jsonData.class]
+	if not classTable then
+		classTable = {}
+		registry.recipeClasses[jsonData.class] = classTable
+	end
+	classTable[#classTable+1] = jsonData
+	
+	return jsonData
+end
+
 traverse(registry.entityTypes, "registry/entityTypes/", createEntityType)
 traverse(registry.tileTypes, "registry/tileTypes/", createTileType)
 traverse(registry.itemTypes, "registry/itemTypes/", createItemType)
+traverse(registry.recipes, "registry/recipes/", createRecipe)
 
 return registry

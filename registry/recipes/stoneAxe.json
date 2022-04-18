@@ -1,0 +1,10 @@
+{
+	"class": "hands",
+	"reagents": [
+		{"type": "cobble", "count": 1},
+		{"type": "stick", "count": 1}
+	],
+	"products": [
+		{"type": "stoneAxe", "count": 1}
+	]
+}
