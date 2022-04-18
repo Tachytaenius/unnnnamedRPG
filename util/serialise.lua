@@ -64,11 +64,16 @@ local function serialise(world, player)
 		tileInventoryEntry.items.capacity = consts.tileInventoryCapacity
 	end
 	
-	local tileIdsByTileType = {} -- for serialising tile data
+	local tileIdsByType = {} -- for serialising tile data
 	local tileIds = ""
 	for i = 0, #world.tileTypesById do
-		tileIds = tileIds .. world.tileTypesById[i].name .. "\n"
-		tileIdsByTileType[world.tileTypesById[i].name] = i
+		local tileType = world.tileTypesById[i]
+		if tileType ~= "dummy" then
+			tileIds = tileIds .. tileType.name .. "\n"
+			tileIdsByType[world.tileTypesById[i].name] = i
+		else
+			tileIds = tileIds .. "dummy\n"
+		end
 	end
 	
 	-- TODO: Those are tile type names, not tile types
@@ -76,8 +81,8 @@ local function serialise(world, player)
 	foregroundTileDataTable = {}
 	for y = 0, world.tileMapHeight - 1 do
 		for x = 0, world.tileMapWidth - 1 do
-			backgroundTileDataTable[#backgroundTileDataTable+1] = string.char(tileIdsByTileType[world.backgroundTiles[x][y].name])
-			foregroundTileDataTable[#foregroundTileDataTable+1] = string.char(tileIdsByTileType[world.foregroundTiles[x][y].name])
+			backgroundTileDataTable[#backgroundTileDataTable+1] = string.char(tileIdsByType[world.backgroundTiles[x][y].name])
+			foregroundTileDataTable[#foregroundTileDataTable+1] = string.char(tileIdsByType[world.foregroundTiles[x][y].name])
 		end
 	end
 	backgroundTileData = table.concat(backgroundTileDataTable)

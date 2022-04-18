@@ -61,8 +61,7 @@ local function loadMap(saveFileName, location)
 	local tileTypesById = {}
 	local i = 0
 	for name in love.filesystem.lines(path .. "tileIds.txt") do
-		tileTypesById[i] = registry.tileTypes[name]
-		assert(tileTypesById[i], "Unknown tile type name " .. i .. " " .. name)
+		tileTypesById[i] = registry.tileTypes[name] or "dummy"
 		i = i + 1
 	end
 	world.tileTypesById = tileTypesById

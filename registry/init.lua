@@ -17,7 +17,7 @@ local function traverse(registryTable, path, createFromJson, registryPathPrefixL
 			if itemName:match("%.json$") then
 				local entryName = itemName:sub(1, -6) -- remove .json
 				local jsonData = json.decode(love.filesystem.read(path))
-				local entry = createFromJson(jsonData, path)
+				local entry = createFromJson(jsonData, path, entryName)
 				entry.assetPath = path:sub(#registryPathPrefixLength + 1, -6) -- remove registryPathPrefixLength and .json
 				entry.name = entryName
 				registryTable[entryName] = entry
@@ -26,20 +26,21 @@ local function traverse(registryTable, path, createFromJson, registryPathPrefixL
 	end
 end
 
-local function createEntityType(jsonData, path)
+local function createEntityType(jsonData, path, entryName)
 	return jsonData
 end
 
-local function createTileType(jsonData, path)
+local function createTileType(jsonData, path, entryName)
+	assert(entryName ~= "dummy", "dummy is a reserved tile type name")
 	registry.numTileTypes = registry.numTileTypes + 1
 	return jsonData
 end
 
-local function createItemType(jsonData, path)
+local function createItemType(jsonData, path, entryName)
 	return jsonData
 end
 
-local function createRecipe(jsonData, path)
+local function createRecipe(jsonData, path, entryName)
 	assert(#jsonData.reagents > 0, "Recipe " .. path .. " must have at least one reagent")
 	for i, stack in ipairs(jsonData.reagents) do
 		assert(stack.count > 0, "Stack " .. i .. " in recipe " .. path .. " must have a count greater than 0")
