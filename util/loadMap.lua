@@ -51,8 +51,12 @@ local function loadMap(saveFileName, location)
 		end
 		if entity.inventory then
 			local capacity = entity.inventory.capacity
+			local equippedItem = entity.inventory.equippedItem
+			local canEquip = entity.inventory.canEquip
 			entity.inventory = entity.inventory.items
 			entity.inventory.capacity = capacity
+			entity.inventory.equippedItem = equippedItem
+			entity.inventory.canEquip = canEquip
 		end
 		util.createEntity(world, entity)
 	end

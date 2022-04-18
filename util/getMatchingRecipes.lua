@@ -1,4 +1,3 @@
-local tableEquals = require("lib.tableEquals")
 local registry = require("registry")
 
 local function getMatchingRecipes(stacks, recipeClassNames)
@@ -17,10 +16,7 @@ local function getMatchingRecipes(stacks, recipeClassNames)
 				local matchesAny = false
 				for _, recipeStack in ipairs(recipe.reagents) do
 					-- check if it matches (excluding count)
-					local recipeStackCount, stackCount = recipeStack.count, stack.count
-					recipeStack.count, stack.count = nil, nil
-					local matches = tableEquals(stack, recipeStack)
-					recipeStack.count, stack.count = recipeStackCount, stackCount
+					local matches = recipeStack.type == stack.type
 					if matches then
 						matchesAny = true
 						recipeItemMatchingProfile[recipeStack] = (recipeItemMatchingProfile[recipeStack] or 0) + stack.count

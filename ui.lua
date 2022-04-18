@@ -83,6 +83,9 @@ function ui.showTransferringInventories(inventoryA, inventoryB, displayNameA, di
 		if inventoryAmount + amountToTransfer * stackSize <= self.otherItems.capacity then
 			local success, error = util.inventory.takeFromStack(self.items, selectedStack, amountToTransfer)
 			if success then
+				if selectedStack == self.items.equippedItem and selectedStack.count <= 0 then
+					self.items.equippedItem = nil
+				end
 				util.inventory.give(self.otherItems, selectedStack.type, amountToTransfer)
 			else
 				ui.textBoxWrapper("Not enough of item to transfer")
@@ -96,6 +99,15 @@ function ui.showTransferringInventories(inventoryA, inventoryB, displayNameA, di
 	window.otherItems = inventoryB
 	window.otherDisplayName = displayNameB
 	window.swapped = false
+end
+
+function ui.crafting(inventory, displayName, classes)
+	local window = ui.inventory(inventory, displayName, function(self)
+		-- TODO
+	end)
+	ui.focusedWindow = window
+	window.type = "crafting"
+	window.classes = classes
 end
 
 function ui.textBox(text, x, y, tx, ty, width, height)
@@ -161,6 +173,18 @@ function ui.update(dt, world, player, commandDone)
 				if uiCommandDone.confirm then
 					if window.selectionFunction then
 						window:selectionFunction()
+					end
+				end
+				if player and window.items == player.inventory and window.items.canEquip and uiCommandDone.equip then
+					local selectedStack = window.items[window.cursor]
+					if selectedStack then
+						if selectedStack == window.items.equippedItem then
+							window.items.equippedItem = nil
+						else
+							window.items.equippedItem = selectedStack
+						end
+					else
+						window.items.equippedItem = nil
 					end
 				end
 				if #window.items > 0 then
@@ -254,7 +278,8 @@ function ui.draw()
 					x = assets.inventory.cursor:getWidth()
 				end
 				local stack = window.items[stackIndex]
-				drawText(registry.itemTypes[stack.type].displayName .. " x" .. stack.count .. " (" .. stack.count * registry.itemTypes[stack.type].size .. ")", x, 8, thisViewOffset)
+				local equippedIndicator = stack == window.items.equippedItem and "(E) " or ""
+				drawText(equippedIndicator .. registry.itemTypes[stack.type].displayName .. " x" .. stack.count .. " (" .. stack.count * registry.itemTypes[stack.type].size .. ")", x, 8, thisViewOffset)
 				thisViewOffset = thisViewOffset + 1
 			end
 			-- more below indicator

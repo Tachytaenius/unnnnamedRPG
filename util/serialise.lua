@@ -32,9 +32,15 @@ local function serialise(world, player)
 	for entity in world.entities:elements() do
 		if entity.inventory then
 			local capacity = entity.inventory.capacity
+			local equippedItem = entity.inventory.equippedItem
+			local canEquip = entity.inventory.canEquip
 			entity.inventory.capacity = nil -- temporary
+			entity.inventory.equippedItem = nil
+			entity.inventory.canEquip = nil
 			entity.inventory = {
 				capacity = capacity,
+				equippedItem = equippedItem,
+				canEquip = canEquip,
 				items = entity.inventory
 			}
 		end
@@ -44,8 +50,12 @@ local function serialise(world, player)
 	for entity in world.entities:elements() do
 		if entity.inventory then
 			local capacity = entity.inventory.capacity
+			local equippedItem = entity.inventory.equippedItem
+			local canEquip = entity.inventory.canEquip
 			entity.inventory = entity.inventory.items
 			entity.inventory.capacity = capacity
+			entity.inventory.equippedItem = equippedItem
+			entity.inventory.canEquip = canEquip
 		end
 	end
 	
