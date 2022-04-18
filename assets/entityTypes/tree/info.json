@@ -1,0 +1,16 @@
+{
+	"defaultSpritesheetName": "none",
+	"withFruitSpritesheetName": "apples",
+	"withoutFruitSpritesheetName": "none",
+	"stumpSpritesheetName": "stump",
+	"spritesheetInfo": {
+		"berries": {
+			"width": 16, "height": 16,
+			"offsetX": 0, "offsetY": 0
+		},
+		"none": {
+			"width": 16, "height": 16,
+			"offsetX": 0, "offsetY": 0
+		}
+	}
+}

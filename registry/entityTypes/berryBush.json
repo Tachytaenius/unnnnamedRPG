@@ -3,6 +3,8 @@
 	"fruitPlant": true,
 	"layer": "terrain",
 	"fruitType": "berry",
-	"fruitCount": 2,
-	"fruitGrowthTime": 300
+	"fruitCount": 3,
+	"fruitGrowthTime": 300,
+	"toolTypeRequired": "axe",
+	"maxHP": 25
 }
