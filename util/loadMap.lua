@@ -51,7 +51,7 @@ local function loadMap(saveFileName, location)
 		end
 		if entity.inventory then
 			local capacity = entity.inventory.capacity
-			local equippedItem = entity.inventory.equippedItem
+			local equippedItem = entity.inventory.items[entity.inventory.equippedItemIndex]
 			local canEquip = entity.inventory.canEquip
 			entity.inventory = entity.inventory.items
 			entity.inventory.capacity = capacity

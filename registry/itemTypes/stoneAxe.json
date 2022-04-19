@@ -1,4 +1,6 @@
 {
 	"displayName": "Stone Axe",
-	"size": 14
+	"size": 14,
+	"toolType": "axe",
+	"attackDamage": 10
 }

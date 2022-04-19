@@ -32,14 +32,23 @@ local function serialise(world, player)
 	for entity in world.entities:elements() do
 		if entity.inventory then
 			local capacity = entity.inventory.capacity
-			local equippedItem = entity.inventory.equippedItem
+			local equippedItemIndex
+			if entity.inventory.equippedItem then
+				for i, item in ipairs(entity.inventory) do
+					if item == entity.inventory.equippedItem then
+						equippedItemIndex = i
+						break
+					end
+				end
+				assert(equippedItemIndex, "Could not find equipped item in inventory")
+			end
 			local canEquip = entity.inventory.canEquip
 			entity.inventory.capacity = nil -- temporary
 			entity.inventory.equippedItem = nil
 			entity.inventory.canEquip = nil
 			entity.inventory = {
 				capacity = capacity,
-				equippedItem = equippedItem,
+				equippedItemIndex = equippedItemIndex,
 				canEquip = canEquip,
 				items = entity.inventory
 			}
@@ -50,7 +59,7 @@ local function serialise(world, player)
 	for entity in world.entities:elements() do
 		if entity.inventory then
 			local capacity = entity.inventory.capacity
-			local equippedItem = entity.inventory.equippedItem
+			local equippedItem = entity.inventory.items[entity.inventory.equippedItemIndex]
 			local canEquip = entity.inventory.canEquip
 			entity.inventory = entity.inventory.items
 			entity.inventory.capacity = capacity

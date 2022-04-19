@@ -10,7 +10,7 @@ local function checkCollision(world, x, y, exclude)
 	end
 	for entity in world.entities:elements() do
 		local entityType = registry.entityTypes[entity.typeName]
-		if not exclude and entityType.solid or entityType.door and not entity.open then
+		if not exclude and (not entityType.fruitPlant and entityType.solid) or (entityType.door and not entity.open) or (entityType.fruitPlant and entityType.solid and not entity.isStump) then
 			if entity.x == x and entity.y == y then
 				return true
 			end

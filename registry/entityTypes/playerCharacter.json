@@ -8,5 +8,6 @@
 	"inventoryCapacity": 80,
 	"defaultSpriteColour": [0.3125, 0.1875, 0.1251],
 	"canEquip": true,
-	"maxHealth": 50
+	"maxHealth": 50,
+	"attackDamage": 2
 }

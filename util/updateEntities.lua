@@ -166,8 +166,13 @@ local function updateEntities(world, player, dt, commandDone, saveFileName)
 		end
 		-- try interaction
 		if entity == player then
-			if entity.moveProgress == nil and commandDone.interact then
-				util.tryInteraction(world, player, entity, commandDone.aimOnStandingTile)
+			if entity.moveProgress == nil then
+				if commandDone.interact then
+					util.tryInteraction(world, player, entity, commandDone.aimOnStandingTile)
+				end
+				if commandDone.attack then
+					util.tryAttack(world, player, entity, commandDone.aimOnStandingTile)
+				end
 			end
 		end
 	end

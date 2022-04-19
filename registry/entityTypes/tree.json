@@ -6,6 +6,11 @@
 	"fruitCount": 2,
 	"fruitGrowthTime": 600,
 	"hasStumpForm": true,
+	"stumpFormHealth": 25,
 	"toolTypeRequired": "axe",
+	"stumpRemovalToolTypeRequired": "shovel",
+	"mainFormDestructionItems": [
+		{"type": "log", "count": 2}
+	],
 	"maxHealth": 100
 }

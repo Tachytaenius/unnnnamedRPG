@@ -1,0 +1,6 @@
+{
+	"displayName": "Stone Shovel",
+	"size": 16,
+	"toolType": "shovel",
+	"attackDamage": 10
+}

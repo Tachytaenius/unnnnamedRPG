@@ -22,7 +22,7 @@ local function createEntity(world, entity)
 		}
 	end
 	if entityType.maxHealth then
-		entity.health = entity.health or entity.maxHealth
+		entity.health = entity.health or entityType.maxHealth
 	end
 	return entity
 end
