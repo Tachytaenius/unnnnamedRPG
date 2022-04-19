@@ -1,7 +1,15 @@
 [
 	{"x": 4, "y": 4, "player": true, "typeName": "playerCharacter", "direction": "down", "spriteColour": [0.3125, 0.1875, 0.1251], "inventory": {"capacity": 80, "items": [
 		{"type": "stoneAxe", "count": 1},
-		{"type": "stoneShovel", "count": 1}
+		{"type": "stoneShovel", "count": 1},
+		{"type": "berry", "count": 1},
+		{"type": "apple", "count": 1},
+		{"type": "log", "count": 1},
+		{"type": "emptyJar", "count": 1},
+		{"type": "jarOfSpice", "count": 1},
+		{"type": "sweetWrapper", "count": 1},
+		{"type": "silkThread", "count": 1},
+		{"type": "silkCloth", "count": 1}
 	]}},
 	{"x": 2, "y": 2, "typeName": "woodenChair", "direction": "down"},
 	{"x": 3, "y": 3, "typeName": "woodenChair", "direction": "left"},

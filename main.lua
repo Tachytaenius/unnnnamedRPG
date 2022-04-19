@@ -69,6 +69,7 @@ function love.load(args)
 	paused = false
 	contentCanvas = love.graphics.newCanvas(consts.contentWidth, consts.contentHeight)
 	colouriseSpriteShader = love.graphics.newShader("shaders/colouriseSprite.glsl")
+	ui.statusWindow(player, 5, 5, 100, 32)
 	commandDone = {}
 end
 

@@ -3,8 +3,8 @@ local consts = {}
 consts.title = "Unnnnamed RPG"
 consts.identity = "unnnnamedrpg"
 
-consts.contentWidth = 160
-consts.contentHeight = 144
+consts.contentWidth = 384
+consts.contentHeight = 256
 
 consts.tileSize = 16
 

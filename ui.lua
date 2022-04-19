@@ -60,10 +60,10 @@ function ui.inventory(inventory, displayName, selectionFunction)
 	window.displayName = displayName
 	window.active = true
 	window.cursor = 1
-	window.visibleSlots = 5
+	window.extraSlotsOffset = 8
 	window.viewOffset = 0
-	window.x, window.y = 8, 8
-	window.width, window.height = 144, 128
+	window.x, window.y = 112, 48
+	window.width, window.height = 160, 176
 	return window
 end
 
@@ -132,6 +132,19 @@ function ui.textBoxWrapper(text)
 	ui.focusedWindow = ui.textBox(text, math.floor(windowX), math.floor(windowY), 0, 0, math.ceil(textWidth+1), math.ceil(textHeight+1))
 end
 
+function ui.statusWindow(entity, x, y, w, h)
+	local window = {}
+	ui.windows[#ui.windows+1] = window
+	window.x, window.y = x, y
+	window.width, window.height = w, h
+	window.entity = entity
+	window.type = "status"
+	window.active = false
+	window.textX, window.textY = 0, 0
+	window.dontDarken = true
+	return window
+end
+
 function ui.update(dt, world, player, commandDone)
 	-- Only allow commands to be registered once per frame
 	local commandDoneCopy = {}
@@ -168,6 +181,9 @@ function ui.update(dt, world, player, commandDone)
 	end
 	
 	for _, window in ipairs(ui.windows) do
+		if window.type == "status" then
+			window.text = "Health: " .. window.entity.health .. "/" .. registry.entityTypes[window.entity.typeName].maxHealth .. "\nMoney: " .. (window.entity.money or 0)
+		end
 		if window == ui.focusedWindow then
 			if window.type == "inventory" or window.type == "transferInventories" then
 				if uiCommandDone.confirm then
@@ -197,8 +213,8 @@ function ui.update(dt, world, player, commandDone)
 					if window.cursor < window.viewOffset + 1 then
 						window.viewOffset = window.cursor - 1
 					end
-					if window.cursor > window.viewOffset + window.visibleSlots + 1 then
-						window.viewOffset = window.cursor - window.visibleSlots - 1
+					if window.cursor > window.viewOffset + window.extraSlotsOffset + 1 then
+						window.viewOffset = window.cursor - window.extraSlotsOffset - 1
 					end
 					if window.cursor > #window.items then
 						window.cursor = #window.items
@@ -244,9 +260,8 @@ function ui.draw()
 		uiSetColor(window, 0.5, 0.5, 0.5)
 		love.graphics.rectangle("fill", 0, 0, window.width, window.height)
 		uiSetColor(window, 1, 1, 1)
-		if window ~= ui.focusedWindow then love.graphics.multiplyColor(0.75, 0.75, 0.75) end
-		if window.type == "textBox" then
-			drawText(window.text, window.textX, window.textY, 0)
+		if window.type == "textBox" or window.type == "status" then
+			drawText(window.text or "", window.textX, window.textY, 0)
 		end
 		if window.type == "inventory" or window.type == "transferInventories" then
 			-- handle (keybinding) for title when in a transferring inventory screen
@@ -267,7 +282,7 @@ function ui.draw()
 			end
 			-- do items
 			local thisViewOffset = 1
-			for stackIndex = 1 + window.viewOffset, math.min(#window.items, 1 + window.viewOffset + window.visibleSlots) do
+			for stackIndex = 1 + window.viewOffset, math.min(#window.items, 1 + window.viewOffset + window.extraSlotsOffset) do
 				-- check for cursor
 				local x
 				if stackIndex == window.cursor then
@@ -283,8 +298,8 @@ function ui.draw()
 				thisViewOffset = thisViewOffset + 1
 			end
 			-- more below indicator
-			if window.viewOffset + window.visibleSlots + 1 < #window.items then
-				love.graphics.draw(assets.inventory.downMoreIndicator, 8, 8 + (2 + window.visibleSlots) * assets.font.font:getHeight())
+			if window.viewOffset + window.extraSlotsOffset + 1 < #window.items then
+				love.graphics.draw(assets.inventory.downMoreIndicator, 8, 8 + (2 + window.extraSlotsOffset) * assets.font.font:getHeight())
 			end
 		end
 		love.graphics.pop()
