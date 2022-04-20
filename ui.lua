@@ -182,7 +182,7 @@ function ui.update(dt, world, player, commandDone)
 	
 	for _, window in ipairs(ui.windows) do
 		if window.type == "status" then
-			window.text = "Health: " .. window.entity.health .. "/" .. registry.entityTypes[window.entity.typeName].maxHealth .. "\nMoney: " .. (window.entity.money or 0)
+			window.text = "Health: " .. window.entity.health .. "/" .. registry.entityTypes[window.entity.typeName].maxHealth -- .. "\nMoney: " .. (window.entity.money or 0)
 		end
 		if window == ui.focusedWindow then
 			if window.type == "inventory" or window.type == "transferInventories" then
