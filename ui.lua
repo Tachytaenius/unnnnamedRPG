@@ -233,17 +233,19 @@ function ui.update(dt, world, player, commandDone)
 	for _, window in ipairs(ui.windows) do
 		if window.type == "craftingChoiceMenu" then
 			if window.howManyResult then
+				local howManyResult = window.howManyResult
+				window.howManyResult = nil
 				-- try giving the items
+				local item = window.items[window.cursor]
 				local spaceRemaining = window.inventoryToGiveTo.capacity - util.inventory.getCountSize(window.inventoryToGiveTo)
 				local spaceFreedByReagentsGone = 0
-				for stack in pairs(window.selectedItems) do
-					spaceFreedByReagentsGone = spaceFreedByReagentsGone + registry.itemTypes[stack.type].size * stack.count * window.howManyResult
+				for _, reagentStack in ipairs(item.recipe.reagents) do
+					spaceFreedByReagentsGone = spaceFreedByReagentsGone + registry.itemTypes[reagentStack.type].size * reagentStack.count * howManyResult
 				end
-				local item = window.items[window.cursor]
-				local spaceTakenUpByProduct = registry.itemTypes[item.type].size * item.count * window.howManyResult
+				local spaceTakenUpByProduct = registry.itemTypes[item.type].size * item.count * howManyResult
 				local finalSpace = spaceRemaining + spaceFreedByReagentsGone - spaceTakenUpByProduct
 				if finalSpace < 0 then
-					ui.textBoxWrapper("Not enough space\nin inventory for\n product, need " .. -finalSpace .. " more\n")
+					ui.textBoxWrapper("Not enough space\nin inventory for\nproduct, need " .. -finalSpace .. " more\n")
 				else
 					local recipe = item.recipe
 					-- take from the right stacks in the right order
@@ -255,7 +257,7 @@ function ui.update(dt, world, player, commandDone)
 						return util.getIndex(window.inventoryToGiveTo, a) < util.getIndex(window.inventoryToGiveTo, b)
 					end)
 					for _, reagent in ipairs(recipe.reagents) do
-						local amountNeeded = reagent.count * window.howManyResult
+						local amountNeeded = reagent.count * howManyResult
 						for _, stack in ipairs(selectedItemsArray) do
 							if stack.type == reagent.type then
 								local amountToTake = math.min(stack.count, amountNeeded)
@@ -269,7 +271,7 @@ function ui.update(dt, world, player, commandDone)
 						end
 					end
 					-- now give
-					util.inventory.give(window.inventoryToGiveTo, item.type, item.count * window.howManyResult)
+					util.inventory.give(window.inventoryToGiveTo, item.type, item.count * howManyResult)
 					assert(window == ui.focusedWindow, "not focused window")
 					ui.cancelFocused()
 				end
@@ -337,7 +339,9 @@ function ui.update(dt, world, player, commandDone)
 				if uiCommandDone.craft then
 					local selectedItemsArray = {}
 					for stack in pairs(window.selectedItems) do
-						selectedItemsArray[#selectedItemsArray + 1] = stack
+						if util.getIndex(window.items, stack) then
+							selectedItemsArray[#selectedItemsArray + 1] = stack
+						end
 					end
 					if #selectedItemsArray > 0 then
 						local craftables = util.getMatchingRecipes(selectedItemsArray, window.classes)
