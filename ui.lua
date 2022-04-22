@@ -103,11 +103,43 @@ end
 
 function ui.crafting(inventory, displayName, classes)
 	local window = ui.inventory(inventory, displayName, function(self)
-		-- TODO
+		if #self.items <= 0 then return end
+		local item = self.items[self.cursor]
+		if item == self.items.equippedItem then return end
+		self.selectedItems[item] = not self.selectedItems[item] or nil
 	end)
 	ui.focusedWindow = window
 	window.type = "crafting"
+	window.selectedItems = {}
 	window.classes = classes
+end
+
+function ui.craftingChoiceMenu(getMatchingRecipesOutput, inventoryToGiveTo, displayName)
+	local window = ui.inventory(getMatchingRecipesOutput, displayName, function(self)
+		local item = self.items[self.cursor]
+		ui.howManyMenu(self, item.maxAmount, registry.itemTypes[item.type].size)
+	end)
+	ui.focusedWindow = window
+	window.type = "craftingChoiceMenu"
+	window.inventoryToGiveTo = inventoryToGiveTo
+end
+
+function ui.howManyMenu(windowToSendTo, maxAmount, sizeOfSingle)
+	local window = {}
+	ui.windows[#ui.windows+1] = window
+	window.sizeOfSingle = sizeOfSingle
+	window.windowToFocusWhenDismissed = ui.focusedWindow
+	window.windowToSendTo = windowToSendTo
+	window.maxAmount = maxAmount
+	window.amount = 1
+	window.type = "howMany"
+	window.text = "How many?"
+	window.textX, window.textY = 0, 0
+	local textWidth = assets.font.font:getWidth(window.text)
+	local textHeight = 32
+	local windowX, windowY = (consts.contentWidth - textWidth) / 2, (consts.contentHeight - textHeight) / 2
+	window.x, window.y, window.width, window.height = math.floor(windowX), math.floor(windowY), math.ceil(textWidth+1), math.ceil(textHeight+1)
+	ui.focusedWindow = window
 end
 
 function ui.textBox(text, x, y, tx, ty, width, height)
@@ -162,16 +194,19 @@ function ui.update(dt, world, player, commandDone)
 	end})
 	
 	-- try opening inventory
-	if not ui.active() and uiCommandDone.openInventory then
+	if not ui.active() then
 		if player.moveProgress == nil and world.tileInventories[player.x] and world.tileInventories[player.x][player.y] then
-			ui.showTransferringInventories(player.inventory, world.tileInventories[player.x][player.y], "Player", "Ground")
-		else
-			-- ui.showEntityInventory(player, "Player")
+			if uiCommandDone.openInventory then
+				ui.showTransferringInventories(player.inventory, world.tileInventories[player.x][player.y], "Player", "Ground")
+			elseif uiCommandDone.openCrafting then
+				-- (function() return uiCommandDone.craft end)() -- HACK: disable crafting on same frame -- not needed because without anything selected it doesn't do anything
+				ui.crafting(player.inventory, "Crafting", {"hands"})
+			end
 		end
 	end
 	
 	-- try closing
-	if ui.focusedWindow and (ui.focusedWindow.type == "inventory" or ui.focusedWindow.type == "transferInventories") and (uiCommandDone.openInventory or uiCommandDone.cancel) then
+	if ui.focusedWindow and (ui.focusedWindow.type == "inventory" or ui.focusedWindow.type == "transferInventories" or ui.focusedWindow.type == "crafting" or ui.focusedWindow.type == "craftingChoiceMenu") and (uiCommandDone.openInventory or uiCommandDone.cancel) then
 		ui.cancelFocused()
 	end
 	if ui.focusedWindow and ui.focusedWindow.type == "textBox" then
@@ -179,19 +214,85 @@ function ui.update(dt, world, player, commandDone)
 			ui.cancelFocused()
 		end
 	end
+	if ui.focusedWindow and ui.focusedWindow.type == "howMany" then
+		if uiCommandDone.selectLeft then
+			ui.focusedWindow.amount = math.max(1, ui.focusedWindow.amount - 1)
+		end
+		if uiCommandDone.selectRight then
+			ui.focusedWindow.amount = math.min(ui.focusedWindow.maxAmount, ui.focusedWindow.amount + 1)
+		end
+		if uiCommandDone.confirm then
+			ui.focusedWindow.windowToSendTo.howManyResult = ui.focusedWindow.amount
+			ui.cancelFocused()
+		elseif uiCommandDone.cancel then
+			ui.focusedWindow.windowToSendTo.howManyResult = nil
+			ui.cancelFocused()
+		end
+	end
 	
 	for _, window in ipairs(ui.windows) do
+		if window.type == "craftingChoiceMenu" then
+			if window.howManyResult then
+				-- try giving the items
+				local spaceRemaining = window.inventoryToGiveTo.capacity - util.inventory.getCountSize(window.inventoryToGiveTo)
+				local spaceFreedByReagentsGone = 0
+				for stack in pairs(window.selectedItems) do
+					spaceFreedByReagentsGone = spaceFreedByReagentsGone + registry.itemTypes[stack.type].size * stack.count * window.howManyResult
+				end
+				local item = window.items[window.cursor]
+				local spaceTakenUpByProduct = registry.itemTypes[item.type].size * item.count * window.howManyResult
+				local finalSpace = spaceRemaining + spaceFreedByReagentsGone - spaceTakenUpByProduct
+				if finalSpace < 0 then
+					ui.textBoxWrapper("Not enough space\nin inventory for\n product, need " .. -finalSpace .. " more\n")
+				else
+					local recipe = item.recipe
+					-- take from the right stacks in the right order
+					local selectedItemsArray = {}
+					for stack in pairs(window.selectedItems) do
+						selectedItemsArray[#selectedItemsArray + 1] = stack
+					end
+					table.sort(selectedItemsArray, function(a, b)
+						return util.getIndex(window.inventoryToGiveTo, a) < util.getIndex(window.inventoryToGiveTo, b)
+					end)
+					for _, reagent in ipairs(recipe.reagents) do
+						local amountNeeded = reagent.count * window.howManyResult
+						for _, stack in ipairs(selectedItemsArray) do
+							if stack.type == reagent.type then
+								local amountToTake = math.min(stack.count, amountNeeded)
+								util.inventory.takeFromStack(window.inventoryToGiveTo, stack, amountToTake)
+								amountNeeded = amountNeeded - amountToTake
+								assert(amountNeeded >= 0, "temporary assert")
+								if amountNeeded <= 0 then
+									break
+								end
+							end
+						end
+					end
+					-- now give
+					util.inventory.give(window.inventoryToGiveTo, item.type, item.count * window.howManyResult)
+					assert(window == ui.focusedWindow, "not focused window")
+					ui.cancelFocused()
+				end
+			end
+		end
 		if window.type == "status" then
 			window.text = "Health: " .. window.entity.health .. "/" .. registry.entityTypes[window.entity.typeName].maxHealth -- .. "\nMoney: " .. (window.entity.money or 0)
 		end
+		if window.type == "howMany" then
+			local sizeText = ""
+			if window.sizeOfSingle then
+				sizeText = " (" .. window.amount * window.sizeOfSingle .. ")"
+			end
+			window.text = "How many?\n" .. window.amount .. "/" .. window.maxAmount .. sizeText
+		end
 		if window == ui.focusedWindow then
-			if window.type == "inventory" or window.type == "transferInventories" then
+			if window.type == "inventory" or window.type == "transferInventories" or window.type == "crafting" or window.type == "craftingChoiceMenu" then
 				if uiCommandDone.confirm then
 					if window.selectionFunction then
 						window:selectionFunction()
 					end
 				end
-				if player and window.items == player.inventory and window.items.canEquip and uiCommandDone.equip then
+				if window.type ~= "craftingChoiceMenu" and player and window.items == player.inventory and window.items.canEquip and uiCommandDone.equip then
 					local selectedStack = window.items[window.cursor]
 					if selectedStack then
 						if selectedStack == window.items.equippedItem then
@@ -232,6 +333,25 @@ function ui.update(dt, world, player, commandDone)
 					window.displayName, window.otherDisplayName = window.otherDisplayName, window.displayName
 				end
 			end
+			if window.type == "crafting" then
+				if uiCommandDone.craft then
+					local selectedItemsArray = {}
+					for stack in pairs(window.selectedItems) do
+						selectedItemsArray[#selectedItemsArray + 1] = stack
+					end
+					if #selectedItemsArray > 0 then
+						local craftables = util.getMatchingRecipes(selectedItemsArray, window.classes)
+						if #craftables > 0 then
+							-- ui.cancelFocused()
+							ui.craftingChoiceMenu(craftables, window.items, "Pick something to make")
+							ui.focusedWindow.windowToFocusWhenDismissed = window
+							ui.focusedWindow.selectedItems = window.selectedItems
+						else
+							ui.textBoxWrapper("Can't make anything\nwith the current\nselection of items\n")
+						end
+					end
+				end
+			end
 		end
 	end
 end
@@ -260,10 +380,10 @@ function ui.draw()
 		uiSetColor(window, 0.5, 0.5, 0.5)
 		love.graphics.rectangle("fill", 0, 0, window.width, window.height)
 		uiSetColor(window, 1, 1, 1)
-		if window.type == "textBox" or window.type == "status" then
+		if window.type == "textBox" or window.type == "status" or window.type == "howMany" then
 			drawText(window.text or "", window.textX, window.textY, 0)
 		end
-		if window.type == "inventory" or window.type == "transferInventories" then
+		if window.type == "inventory" or window.type == "transferInventories" or window.type == "crafting" or window.type == "craftingChoiceMenu" then
 			-- handle (keybinding) for title when in a transferring inventory screen
 			local extraText = ""
 			if window.type == "transferInventories" then
@@ -275,7 +395,8 @@ function ui.draw()
 				end
 			end
 			-- do title
-			drawText(window.displayName .. " (" .. util.inventory.getCountSize(window.items) .. "/" .. window.items.capacity .. ") " .. extraText, 0, 0, 0)
+			local capacityText = window.items.capacity and (" (" .. util.inventory.getCountSize(window.items) .. "/" .. window.items.capacity .. ") ") or ""
+			drawText(window.displayName .. capacityText .. extraText, 0, 0, 0)
 			-- more above indicator
 			if window.viewOffset > 0 then
 				love.graphics.draw(assets.inventory.upMoreIndicator, 8, 1 * assets.font.font:getHeight())
@@ -294,7 +415,12 @@ function ui.draw()
 				end
 				local stack = window.items[stackIndex]
 				local equippedIndicator = stack == window.items.equippedItem and "(E) " or ""
-				drawText(equippedIndicator .. registry.itemTypes[stack.type].displayName .. " x" .. stack.count .. " (" .. stack.count * registry.itemTypes[stack.type].size .. ")", x, 8, thisViewOffset)
+				local craftingSelectedIndicator = window.selectedItems and window.selectedItems[stack] and "(C) " or ""
+				local itemName = registry.itemTypes[stack.type].displayName
+				local itemSize = registry.itemTypes[stack.type].size
+				local craftingChoiceMenuMaxAmountText = window.type == "craftingChoiceMenu" and (" (x" .. stack.maxAmount .. ")") or ""
+				local text = equippedIndicator .. craftingSelectedIndicator .. itemName .. " x" .. stack.count .. " (" .. stack.count * itemSize .. ")" .. craftingChoiceMenuMaxAmountText
+				drawText(text, x, 8, thisViewOffset)
 				thisViewOffset = thisViewOffset + 1
 			end
 			-- more below indicator

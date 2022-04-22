@@ -29,6 +29,13 @@ local function getMatchingRecipes(stacks, recipeClassNames)
 					break
 				end
 			end
+			-- if there are reagents that aren't matched in the recipe, then the recipe isn't matched
+			for _, recipeStack in ipairs(recipe.reagents) do
+				local profile = recipeItemMatchingProfile[recipeStack]
+				if not profile or profile <= 0 then
+					doesntMatch = true
+				end
+			end
 			if not doesntMatch then
 				-- get maximum amount craftable and add to return table if it's >= 1
 				local maxAmount
@@ -37,7 +44,7 @@ local function getMatchingRecipes(stacks, recipeClassNames)
 					maxAmount = maxAmount and math.min(maxAmount, countThisStack) or countThisStack
 				end
 				if maxAmount >= 1 then
-					ret[#ret+1] = {recipe = recipe, maxAmount = maxAmount}
+					ret[#ret+1] = {recipe = recipe, type = recipe.product.type, count = recipe.product.count, maxAmount = maxAmount}
 				end
 			end
 		end
