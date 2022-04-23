@@ -1,4 +1,8 @@
 {
 	"door": true,
-	"layer": "furniture"
+	"layer": "furniture",
+	"easyRemove": true,
+	"destructionItems": [
+		{"type": "woodenDoor", "count": 1}
+	]
 }

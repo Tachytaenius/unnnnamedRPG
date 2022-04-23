@@ -7,5 +7,9 @@
 	"producerProductFarm": true,
 	"producer": "silkworm",
 	"product": "silkThread",
-	"productionTime": 600
+	"productionTime": 600,
+	"easyRemove": true,
+	"destructionItems": [
+		{"type": "woodenSilkwormBoxes", "count": 1}
+	]
 }

@@ -1,5 +1,9 @@
 {
 	"solid": false,
 	"layer": "furniture",
-	"orientable": true
+	"orientable": true,
+	"easyRemove": true,
+	"destructionItems": [
+		{"type": "woodenChair", "count": 1}
+	]
 }

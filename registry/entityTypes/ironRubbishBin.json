@@ -4,5 +4,9 @@
 	"deletesItems": true,
 	"layer": "furniture",
 	"containerDisplayName": "Trash",
-	"inventoryCapacity": 100
+	"inventoryCapacity": 100,
+	"easyRemove": true,
+	"destructionItems": [
+		{"type": "ironRubbishBin", "count": 1}
+	]
 }
