@@ -61,6 +61,9 @@ function inventory.take(inv, itemType, amountToTake)
 			amountTaken = amountTaken + amountTakenThisStack
 			if stack.count <= 0 then
 				table.remove(inv, i)
+				if stack == inv.equippedItem then
+					inv.equippedItem = nil
+				end
 			else
 				i = i + 1
 			end
@@ -82,6 +85,9 @@ function inventory.takeFromStack(inv, stack, amountToTake)
 	stack.count = stack.count - amountToTake
 	if stack.count == 0 then
 		table.remove(inv, stackIndex)
+		if stack == inv.equippedItem then
+			inv.equippedItem = nil
+		end
 	end
 	return true
 end

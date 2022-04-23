@@ -9,5 +9,6 @@
 	"defaultSpriteColour": [0.3125, 0.1875, 0.1251],
 	"canEquip": true,
 	"maxHealth": 50,
-	"attackDamage": 2
+	"attackDamage": 2,
+	"orientable": true
 }

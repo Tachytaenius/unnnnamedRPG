@@ -44,5 +44,6 @@ consts.commands.nextDisplay = "released"
 consts.commands.scaleDown = "released"
 consts.commands.scaleUp = "released"
 consts.commands.toggleFullscreen = "released"
+consts.commands.save = "pressed"
 
 return consts

@@ -36,5 +36,6 @@ settings.commands.nextDisplay = "f8"
 settings.commands.scaleDown = "f9"
 settings.commands.scaleUp = "f10"
 settings.commands.toggleFullscreen = "f11"
+settings.commands.save = "f1"
 
 return settings

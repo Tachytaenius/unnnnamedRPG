@@ -1,0 +1,11 @@
+{
+	"solid": true,
+	"layer": "furniture",
+	"crafting": true,
+	"craftingRecipeClasses": ["hands", "workbench"],
+	"craftingDisplayName": "Workbench Crafting",
+	"easyRemove": true,
+	"destructionItems": [
+		{"type": "woodenWorkbench", "count": 1}
+	]
+}

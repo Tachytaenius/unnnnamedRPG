@@ -227,6 +227,12 @@ function love.update(dt)
 			end
 		end
 	end
+	if commandDone.save then
+		if saveLoaded then
+			util.save(saveFileName, world, player)
+			ui.textBoxWrapper("Saved!")
+		end
+	end
 	local recreateWindow = false
 	if commandDone.previousDisplay then
 		local prevDisplayNumber = settings.graphics.displayNumber

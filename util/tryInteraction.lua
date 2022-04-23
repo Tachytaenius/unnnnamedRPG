@@ -16,7 +16,7 @@ local function tryInteraction(world, player, entity, onEntityTile)
 		local interacteeType = registry.entityTypes[interactee.typeName]
 		if interacteeType.door then
 			if interactee.open then
-				if not util.checkCollision(world, interactee.x, interactee.y, interacte) then
+				if not util.checkCollision(world, interactee.x, interactee.y, interactee) then
 					interactee.open = false
 				end
 			else
@@ -39,6 +39,27 @@ local function tryInteraction(world, player, entity, onEntityTile)
 			end
 		elseif interacteeType.container then
 			ui.showTransferringInventories(player.inventory, interactee.inventory, entity == player and "Player" or "Entity", interacteeType.containerDisplayName)
+		elseif interacteeType.crafting and entity == player then
+			ui.crafting(entity.inventory, interacteeType.craftingDisplayName, interacteeType.craftingRecipeClasses)
+		end
+	end
+	if #interactees <= 0 then
+		if not util.checkCollision(world, interactionTileX, interactionTileY) then
+			local equippedItem = entity.inventory and entity.inventory.equippedItem
+			if equippedItem then
+				local equippedItemType = registry.itemTypes[equippedItem.type]
+				local entityTypeNameToCreate = equippedItemType.spawnsEntity
+				if entityTypeNameToCreate then
+					util.inventory.takeFromStack(entity.inventory, equippedItem, 1)
+					local direction = (not entity.direction and "down") or entity.direction == "up" and "down" or entity.direction == "down" and "up" or entity.direction == "left" and "right" or entity.direction == "right" and "left"
+					util.createEntity(world, {
+						typeName = entityTypeNameToCreate,
+						direction = direction,
+						x = interactionTileX,
+						y = interactionTileY
+					})
+				end
+			end
 		end
 	end
 end

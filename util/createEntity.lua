@@ -24,6 +24,9 @@ local function createEntity(world, entity)
 	if entityType.maxHealth then
 		entity.health = entity.health or entityType.maxHealth
 	end
+	if entityType.orientable then
+		entity.direction = entity.direction
+	end
 	return entity
 end
 

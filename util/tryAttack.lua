@@ -14,7 +14,9 @@ local function tryAttack(world, player, entity, onEntityTile)
 	local attackees = util.getStationaryEntitiesAtTile(world, attackTileX, attackTileY, entity)
 	for _, attackee in ipairs(attackees) do
 		local attackeeType = registry.entityTypes[attackee.typeName]
-		if attackeeType.fruitPlant then
+		if attackeeType.easyRemove then
+			attackee.health = 0 -- minor hack, destroy whether entity has health or not
+		elseif attackeeType.fruitPlant then
 			if attackee.isStump then
 				if entityEquippedItemType and entityEquippedItemType.toolType == attackeeType.stumpRemovalToolTypeRequired or not attackeeType.stumpRemovalToolTypeRequired then
 					local damage = (entityType.attackDamage or 0) + (entityEquippedItemType.attackDamage or 0)
@@ -44,8 +46,14 @@ local function tryAttack(world, player, entity, onEntityTile)
 			end
 		end
 		-- was it destroyed?
-		if attackee.health <= 0 then
+		if attackee.health and attackee.health <= 0 then
 			world.entities:remove(attackee)
+			if attackeeType.destructionItems then
+				local tileInventory = world.tileInventories[attackee.x][attackee.y]
+				for _, stack in ipairs(attackeeType.destructionItems) do
+					util.inventory.give(tileInventory, stack.type, stack.count)
+				end
+			end
 		end
 	end
 end
