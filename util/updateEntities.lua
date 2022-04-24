@@ -122,13 +122,24 @@ local function updateEntities(world, player, dt, commandDone, saveFileName)
 				entity.turnMovementDelayTimer = nil
 			end
 		end
-		if entity.fruitGrowthTimer then
-			entity.fruitGrowthTimer = entity.fruitGrowthTimer - dt
-			if entity.fruitGrowthTimer <= 0 then
-				if entityType.fruitPlant then
-					entity.hasFruit = true
+		if entity.plantMaturityGrowthTimer then
+			if not util.checkCollision(world, entity.x, entity.y, entity) then
+				entity.plantMaturityGrowthTimer = entity.plantMaturityGrowthTimer - dt
+				if entity.plantMaturityGrowthTimer <= 0 then
+					entity.seedling = nil
+					entity.plantMaturityGrowthTimer = nil
 				end
-				entity.fruitGrowthTimer = nil
+			end
+		end
+		if entity.fruitGrowthTimer then
+			if not entity.seedling then
+				entity.fruitGrowthTimer = entity.fruitGrowthTimer - dt
+				if entity.fruitGrowthTimer <= 0 then
+					if entityType.fruitPlant then
+						entity.hasFruit = true
+					end
+					entity.fruitGrowthTimer = nil
+				end
 			end
 		end
 		if entityType.producerProductFarm then

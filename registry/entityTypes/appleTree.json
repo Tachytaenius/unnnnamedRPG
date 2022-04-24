@@ -12,5 +12,6 @@
 	"mainFormDestructionItems": [
 		{"type": "log", "count": 2}
 	],
-	"maxHealth": 100
+	"maxHealth": 100,
+	"maturityGrowthTime": 1200
 }

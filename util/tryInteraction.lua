@@ -52,12 +52,19 @@ local function tryInteraction(world, player, entity, onEntityTile)
 				if entityTypeNameToCreate then
 					util.inventory.takeFromStack(entity.inventory, equippedItem, 1)
 					local direction = (not entity.direction and "down") or entity.direction == "up" and "down" or entity.direction == "down" and "up" or entity.direction == "left" and "right" or entity.direction == "right" and "left"
-					util.createEntity(world, {
+					local newEntity = {
 						typeName = entityTypeNameToCreate,
 						direction = direction,
 						x = interactionTileX,
 						y = interactionTileY
-					})
+					}
+					if equippedItemType.entitySpawnAttributes then
+						for k, v in pairs(equippedItemType.entitySpawnAttributes) do
+							if type(v) == "table" then error("NYI") end -- TODO (when needed)
+							newEntity[k] = v
+						end
+					end
+					util.createEntity(world, newEntity)
 				end
 			end
 		end

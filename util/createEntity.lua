@@ -27,6 +27,14 @@ local function createEntity(world, entity)
 	if entityType.orientable then
 		entity.direction = entity.direction
 	end
+	if entityType.fruitPlant then
+		if not entity.hasFruit and not entity.seedling then
+			entity.fruitGrowthTimer = entity.fruitGrowthTimer or entityType.fruitGrowthTime
+		end
+		if entity.seedling then
+			entity.plantMaturityGrowthTimer = entity.plantMaturityGrowthTimer or entityType.maturityGrowthTime
+		end
+	end
 	return entity
 end
 

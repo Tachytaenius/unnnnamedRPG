@@ -3,12 +3,17 @@
 	"withFruitSpritesheetName": "apples",
 	"withoutFruitSpritesheetName": "none",
 	"stumpSpritesheetName": "stump",
+	"seedlingSpritesheetName": "seedling",
 	"spritesheetInfo": {
 		"apples": {
 			"width": 16, "height": 16,
 			"offsetX": 0, "offsetY": 0
 		},
 		"stump": {
+			"width": 16, "height": 16,
+			"offsetX": 0, "offsetY": 0
+		},
+		"seedling": {
 			"width": 16, "height": 16,
 			"offsetX": 0, "offsetY": 0
 		},

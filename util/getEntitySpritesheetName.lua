@@ -8,7 +8,7 @@ local function getEntitySpritesheetName(entity)
 	if entityType.door then
 		return entity.open and entityAsset.info.openSpritesheetName or entityAsset.info.closedSpritesheetName
 	elseif entityType.fruitPlant then
-		return entity.isStump and entityAsset.info.stumpSpritesheetName or entity.hasFruit and entityAsset.info.withFruitSpritesheetName or entityAsset.info.withoutFruitSpritesheetName
+		return entity.seedling and entityAsset.info.seedlingSpritesheetName or entity.stump and entityAsset.info.stumpSpritesheetName or entity.hasFruit and entityAsset.info.withFruitSpritesheetName or entityAsset.info.withoutFruitSpritesheetName
 	elseif entityType.producerProductFarm then
 		local spritesheetNameTable
 		local hasProducer = entity.inventory and util.inventory.getCount(entity.inventory, entityType.producer) > 0
