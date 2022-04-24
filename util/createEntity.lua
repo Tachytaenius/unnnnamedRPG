@@ -24,7 +24,7 @@ local function createEntity(world, entity)
 	if entityType.maxHealth then
 		entity.health = entity.health or entityType.maxHealth
 	end
-	if entityType.orientable then
+	if entityType.hasDirection then
 		entity.direction = entity.direction
 	end
 	if entityType.fruitPlant then

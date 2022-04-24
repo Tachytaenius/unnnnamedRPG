@@ -10,5 +10,5 @@
 	"canEquip": true,
 	"maxHealth": 50,
 	"attackDamage": 2,
-	"orientable": true
+	"hasDirection": true
 }

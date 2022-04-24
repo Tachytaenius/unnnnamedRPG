@@ -184,6 +184,9 @@ local function updateEntities(world, player, dt, commandDone, saveFileName)
 				if commandDone.attack then
 					util.tryAttack(world, player, entity, commandDone.aimOnStandingTile)
 				end
+				if commandDone.rotateFurniture then
+					util.tryRotateFurniture(world, player, entity, commandDone.aimOnStandingTile)
+				end
 			end
 		end
 	end
