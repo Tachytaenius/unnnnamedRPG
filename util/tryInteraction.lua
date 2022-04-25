@@ -50,21 +50,35 @@ local function tryInteraction(world, player, entity, onEntityTile)
 				local equippedItemType = registry.itemTypes[equippedItem.type]
 				local entityTypeNameToCreate = equippedItemType.spawnsEntity
 				if entityTypeNameToCreate then
-					util.inventory.takeFromStack(entity.inventory, equippedItem, 1)
-					local direction = (not entity.direction and "down") or entity.direction == "up" and "down" or entity.direction == "down" and "up" or entity.direction == "left" and "right" or entity.direction == "right" and "left"
-					local newEntity = {
-						typeName = entityTypeNameToCreate,
-						direction = direction,
-						x = interactionTileX,
-						y = interactionTileY
-					}
-					if equippedItemType.entitySpawnAttributes then
-						for k, v in pairs(equippedItemType.entitySpawnAttributes) do
-							if type(v) == "table" then error("NYI") end -- TODO (when needed)
-							newEntity[k] = v
+					local ok = false
+					if equippedItemType.entitySpawnTiles then
+						local tileTypeName = world.backgroundTiles[interactionTileX][interactionTileY].name
+						for _, name in ipairs(equippedItemType.entitySpawnTiles) do
+							if tileTypeName == name then
+								ok = true
+								break
+							end
 						end
+					else
+						ok = true
 					end
-					util.createEntity(world, newEntity)
+					if ok then
+						util.inventory.takeFromStack(entity.inventory, equippedItem, 1)
+						local direction = (not entity.direction and "down") or entity.direction == "up" and "down" or entity.direction == "down" and "up" or entity.direction == "left" and "right" or entity.direction == "right" and "left"
+						local newEntity = {
+							typeName = entityTypeNameToCreate,
+							direction = direction,
+							x = interactionTileX,
+							y = interactionTileY
+						}
+						if equippedItemType.entitySpawnAttributes then
+							for k, v in pairs(equippedItemType.entitySpawnAttributes) do
+								if type(v) == "table" then error("NYI") end -- TODO (when needed)
+								newEntity[k] = v
+							end
+						end
+						util.createEntity(world, newEntity)
+					end
 				end
 			end
 		end

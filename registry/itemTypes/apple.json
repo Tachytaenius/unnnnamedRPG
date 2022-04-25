@@ -4,5 +4,8 @@
 	"spawnsEntity": "appleTree",
 	"entitySpawnAttributes": {
 		"seedling": true
-	}
+	},
+	"entitySpawnTiles": [
+		"grass", "dirt", "pebbledGrass"
+	]
 }
