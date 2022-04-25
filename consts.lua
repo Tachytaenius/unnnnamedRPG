@@ -8,7 +8,7 @@ consts.contentHeight = 256
 
 consts.tileSize = 16
 
-consts.startingScene = "testScene"
+consts.startingScene = "bigHouse"
 consts.tileInventoryCapacity = 40 -- how much dropped item can fit on one tile?
 consts.warpFadeTime = 0.5
 

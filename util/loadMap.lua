@@ -71,7 +71,8 @@ local function loadMap(saveFileName, location)
 	world.tileTypesById = tileTypesById
 	
 	-- background/foregroundTileData.bin (or csv)
-	local function loadTileData(name, colliders)
+	local function loadTileData(name)
+		print(name)
 		local layerTableName = name .. "Tiles"
 		world[layerTableName] = {}
 		local tileDataString = love.filesystem.read(path .. name .. "TileData.bin")
@@ -83,6 +84,8 @@ local function loadMap(saveFileName, location)
 			for y = 0, world.tileMapHeight - 1 do
 				local i = x + world.tileMapWidth * y
 				local tile = tileTypesById[tileDataString:sub(i+1, i+1):byte()]
+				print(tileDataString:sub(i+1, i+1):byte())
+				print(tile.name)
 				world[layerTableName][x][y] = tile
 			end
 		end

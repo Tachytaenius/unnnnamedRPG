@@ -1,0 +1,10 @@
+{
+	"solid": false,
+	"layer": "furniture",
+	"hasDirection": true,
+	"canBeRotated": true,
+	"easyRemove": true,
+	"destructionItems": [
+		{"type": "woodenBed", "count": 1}
+	]
+}

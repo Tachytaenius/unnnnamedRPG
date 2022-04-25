@@ -1,0 +1,12 @@
+nothing
+dirt
+grass
+floweredGrass
+pebbledGrass
+downStairs
+upStairs
+woodenPlanks
+woodenWallFront
+woodenWallTopOnly
+stoneTileFloor
+stoneBrickWall
