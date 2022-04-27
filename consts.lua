@@ -46,5 +46,6 @@ consts.commands.scaleDown = "released"
 consts.commands.scaleUp = "released"
 consts.commands.toggleFullscreen = "released"
 consts.commands.save = "pressed"
+consts.commands.updateWarps = "pressed"
 
 return consts

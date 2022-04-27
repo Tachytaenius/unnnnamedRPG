@@ -233,6 +233,12 @@ function love.update(dt)
 			ui.textBoxWrapper("Saved!")
 		end
 	end
+	if commandDone.updateWarps then
+		if saveLoaded then
+			util.updateWarps(world)
+			ui.textBoxWrapper("Updated warps from\ndefault version of\nthis scene\n")
+		end
+	end
 	local recreateWindow = false
 	if commandDone.previousDisplay then
 		local prevDisplayNumber = settings.graphics.displayNumber
