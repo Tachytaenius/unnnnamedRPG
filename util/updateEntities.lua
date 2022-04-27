@@ -3,9 +3,12 @@ local registry = require("registry")
 local consts = require("consts")
 
 local function updateEntities(world, player, dt, commandDone, saveFileName)
-	local function tryWarp(entity)
+	local function tryWarp(entity, walked)
 		if entity == player then
 			for _, warp in ipairs(world.warps) do
+				if walked and not warp.onWalk then
+					return
+				end
 				if warp.x == player.x and warp.y == player.y then
 					util.fade(consts.warpFadeTime, function()
 						util.changeMap(saveFileName, warp.location, warp.newX, warp.newY, warp.direction, world, player)
@@ -23,7 +26,7 @@ local function updateEntities(world, player, dt, commandDone, saveFileName)
 		
 		-- warping on same tile
 		if commandDone.tryWarpOnSametile then
-			tryWarp(entity)
+			tryWarp(entity, false)
 		end
 		-- if we're moving, do movement
 		if entity.moveProgress then
@@ -34,7 +37,7 @@ local function updateEntities(world, player, dt, commandDone, saveFileName)
 				entity.moveProgress = nil
 				entity.moveDirection = nil
 				entity.nextWalkCycleStartPos = not entityType.alternateWalkCycleStartPos and 0 or entity.nextWalkCycleStartPos == 0 and 0.5 or 0
-				tryWarp(entity)
+				tryWarp(entity, true)
 			end
 		end
 		-- if we're not moving, see if we are to move
