@@ -39,5 +39,6 @@ settings.commands.scaleUp = "f10"
 settings.commands.toggleFullscreen = "f11"
 settings.commands.save = "f1"
 settings.commands.updateWarps = "f2"
+settings.commands.showPosition = "f3"
 
 return settings

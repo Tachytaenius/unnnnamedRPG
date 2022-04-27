@@ -239,6 +239,11 @@ function love.update(dt)
 			ui.textBoxWrapper("Updated warps from\ndefault version of\nthis scene\n")
 		end
 	end
+	if commandDone.showPosition then
+		if player then
+			ui.textBoxWrapper("x: " .. player.x .. " y: " .. player.y .. "\nLocation: " .. world.location .. "\n")
+		end
+	end
 	local recreateWindow = false
 	if commandDone.previousDisplay then
 		local prevDisplayNumber = settings.graphics.displayNumber
