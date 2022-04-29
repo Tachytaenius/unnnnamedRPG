@@ -1,0 +1,9 @@
+{
+	"solid": true,
+	"layer": "terrain",
+	"toolTypeRequired": "pickaxe",
+	"destructionItems": [
+		{"type": "ironOre", "count": 2}
+	],
+	"maxHealth": 400
+}

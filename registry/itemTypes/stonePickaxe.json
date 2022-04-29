@@ -1,0 +1,6 @@
+{
+	"displayName": "Stone Pickaxe",
+	"size": 16,
+	"toolType": "pickaxe",
+	"attackDamage": 8
+}

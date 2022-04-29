@@ -15,7 +15,14 @@ local function tryAttack(world, player, entity, onEntityTile)
 	for _, attackee in ipairs(attackees) do
 		local attackeeType = registry.entityTypes[attackee.typeName]
 		if attackeeType.easyRemove then
-			attackee.health = 0 -- minor hack, destroy whether entity has health or not
+			if entityEquippedItemType and entityEquippedItemType.toolType == attackeeType.toolTypeRequired or not attackeeType.toolTypeRequired then
+				attackee.health = 0 -- minor hack, destroy whether entity has health or not
+			end
+		elseif attackee.health then
+			if entityEquippedItemType and entityEquippedItemType.toolType == attackeeType.toolTypeRequired or not attackeeType.toolTypeRequired then
+				local damage = (entityType.attackDamage or 0) + (entityEquippedItemType.attackDamage or 0)
+				attackee.health = math.max(0, attackee.health - damage)
+			end
 		elseif attackeeType.fruitPlant then
 			if attackee.stump then
 				if entityEquippedItemType and entityEquippedItemType.toolType == attackeeType.stumpRemovalToolTypeRequired or not attackeeType.stumpRemovalToolTypeRequired then
