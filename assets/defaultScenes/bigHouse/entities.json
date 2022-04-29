@@ -8,10 +8,15 @@
 	{"x": 13, "y": 12, "direction": "up", "typeName": "woodenChair"},
 	{"x": 13, "y": 10, "direction": "down", "typeName": "woodenChair"},
 	{"x": 13, "y": 5, "direction": "down", "typeName": "woodenBed"},
-	{"x": 19, "y": 5, "typeName": "woodenChest"},
-	{"x": 18, "y": 5, "typeName": "woodenChest"},
+	{"x": 19, "y": 5, "typeName": "woodenChest", "inventory": {"capacity": 80, "items": [
+		{"type": "stoneAxe", "count": 1},
+		{"type": "stoneShovel", "count": 1},
+		{"type": "stonePickaxe", "count": 1}
+	]}},
+	{"x": 19, "y": 6, "typeName": "woodenChest"},
 	{"x": 19, "y": 7, "typeName": "woodenChest"},
 	{"x": 17, "y": 7, "typeName": "woodenChest"},
+	{"x": 17, "y": 6, "typeName": "woodenChest"},
 	{"x": 15, "y": 9, "typeName": "ironRubbishBin"},
 	{"x": 18, "y": 18, "direction": "up", "player": true, "typeName": "playerCharacter"},
 	{"x": 14, "y": 5, "typeName": "woodenTable"},
