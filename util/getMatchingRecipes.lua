@@ -45,7 +45,7 @@ local function getMatchingRecipes(stacks, recipeClassNames)
 						maxAmount = maxAmount and math.min(maxAmount, countThisStack) or countThisStack
 					end
 					if maxAmount >= 1 then
-						ret[#ret+1] = {recipe = recipe, type = recipe.product.type, count = recipe.product.count, maxAmount = maxAmount}
+						ret[#ret+1] = {recipe = recipe, type = recipe.products[1].type, count = recipe.products[1].count, maxAmount = maxAmount}
 					end
 				end
 			end

@@ -3,5 +3,7 @@
 	"reagents": [
 		{"type": "log", "count": 1}
 	],
-	"product": {"type": "woodenTable", "count": 1}
+	"products": [
+		{"type": "woodenTable", "count": 1}
+	]
 }

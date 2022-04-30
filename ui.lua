@@ -242,10 +242,13 @@ function ui.update(dt, world, player, commandDone)
 				for _, reagentStack in ipairs(item.recipe.reagents) do
 					spaceFreedByReagentsGone = spaceFreedByReagentsGone + registry.itemTypes[reagentStack.type].size * reagentStack.count * howManyResult
 				end
-				local spaceTakenUpByProduct = registry.itemTypes[item.type].size * item.count * howManyResult
-				local finalSpace = spaceRemaining + spaceFreedByReagentsGone - spaceTakenUpByProduct
+				local spaceTakenUpByProducts = 0
+				for _, product in ipairs(item.recipe) do
+					spaceTakenUpByProducts = spaceTakenUpByProducts + registry.itemTypes[product.type].size * product.count * howManyResult
+				end
+				local finalSpace = spaceRemaining + spaceFreedByReagentsGone - spaceTakenUpByProducts
 				if finalSpace < 0 then
-					ui.textBoxWrapper("Not enough space\nin inventory for\nproduct, need " .. -finalSpace .. " more\n")
+					ui.textBoxWrapper("Not enough space\nin inventory for\nproducts, need " .. -finalSpace .. " more\n")
 				else
 					local recipe = item.recipe
 					-- take from the right stacks in the right order
@@ -271,7 +274,9 @@ function ui.update(dt, world, player, commandDone)
 						end
 					end
 					-- now give
-					util.inventory.give(window.inventoryToGiveTo, item.type, item.count * howManyResult)
+					for _, product in ipairs(recipe.products) do
+						util.inventory.give(window.inventoryToGiveTo, product.type, product.count * howManyResult)
+					end
 					assert(window == ui.focusedWindow, "not focused window")
 					ui.cancelFocused()
 				end
