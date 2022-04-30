@@ -11,8 +11,8 @@ local function createEntity(world, entity)
 	end
 	if entityType.inventoryCapacity then
 		entity.inventory = entity.inventory or {}
-		entity.inventory.capacity = entityType.inventoryCapacity
-		entity.inventory.canEquip = entityType.canEquip
+		entity.inventory.capacity = entity.inventory.capacity or entityType.inventoryCapacity
+		entity.inventory.canEquip = entity.inventory.canEquip == nil and entityType.canEquip or entity.inventory.canEquip
 	end
 	if entityType.defaultSpriteColour and not entity.spriteColour then
 		entity.spriteColour = {
