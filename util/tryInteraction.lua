@@ -37,8 +37,8 @@ local function tryInteraction(world, player, entity, onEntityTile)
 					end
 				end
 			end
-		elseif interacteeType.container then
-			ui.showTransferringInventories(interactee.inventory, player.inventory, interacteeType.containerDisplayName, entity == player and "Player" or "Entity")
+		elseif interacteeType.container and entity == player then
+			ui.showTransferringInventories(interactee.inventory, player.inventory, interacteeType.containerDisplayName, "Player")
 		elseif interacteeType.crafting and entity == player then
 			ui.crafting(entity.inventory, interacteeType.craftingDisplayName, interacteeType.craftingRecipeClasses)
 		end
