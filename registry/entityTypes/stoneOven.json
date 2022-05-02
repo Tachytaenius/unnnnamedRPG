@@ -1,0 +1,11 @@
+{
+	"solid": true,
+	"layer": "furniture",
+	"crafting": true,
+	"craftingRecipeClasses": ["oven"],
+	"craftingDisplayName": "Cooking",
+	"easyRemove": true,
+	"destructionItems": [
+		{"type": "stoneOven", "count": 1}
+	]
+}

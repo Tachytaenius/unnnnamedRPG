@@ -1,0 +1,9 @@
+{
+	"class": "workbench",
+	"reagents": [
+		{"type": "cobble", "count": 3}
+	],
+	"products": [
+		{"type": "stoneOven", "count": 1}
+	]
+}
