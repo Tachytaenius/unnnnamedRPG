@@ -14,41 +14,43 @@ local function tryAttack(world, player, entity, onEntityTile)
 	local attackees = util.getStationaryEntitiesAtTile(world, attackTileX, attackTileY, entity)
 	for _, attackee in ipairs(attackees) do
 		local attackeeType = registry.entityTypes[attackee.typeName]
-		if attackeeType.easyRemove then
-			if entityEquippedItemType and entityEquippedItemType.toolType == attackeeType.toolTypeRequired or not attackeeType.toolTypeRequired then
-				attackee.health = 0 -- minor hack, destroy whether entity has health or not
-			end
-		elseif attackee.health then
-			if entityEquippedItemType and entityEquippedItemType.toolType == attackeeType.toolTypeRequired or not attackeeType.toolTypeRequired then
-				local damage = (entityType.attackDamage or 0) + (entityEquippedItemType.attackDamage or 0)
-				attackee.health = math.max(0, attackee.health - damage)
-			end
-		elseif attackeeType.fruitPlant then
-			if attackee.stump then
-				if entityEquippedItemType and entityEquippedItemType.toolType == attackeeType.stumpRemovalToolTypeRequired or not attackeeType.stumpRemovalToolTypeRequired then
+		if not attackee.inventory or #attackee.inventory <= 0 then -- NOTE: This is the line responsible for current can't-destroy-entities-with-items-in-them behaviour
+			if attackeeType.easyRemove then
+				if entityEquippedItemType and entityEquippedItemType.toolType == attackeeType.toolTypeRequired or not attackeeType.toolTypeRequired then
+					attackee.health = 0 -- minor hack, destroy whether entity has health or not
+				end
+			elseif attackee.health then
+				if entityEquippedItemType and entityEquippedItemType.toolType == attackeeType.toolTypeRequired or not attackeeType.toolTypeRequired then
 					local damage = (entityType.attackDamage or 0) + (entityEquippedItemType.attackDamage or 0)
 					attackee.health = math.max(0, attackee.health - damage)
 				end
-			elseif attackee.seedling then
-				attackee.health = 0
-			else
-				if entityEquippedItemType and entityEquippedItemType.toolType == attackeeType.toolTypeRequired or not attackeeType.toolTypeRequired then
-					local damage = (entityType.attackDamage or 0) + (entityEquippedItemType.attackDamage or 0)
-					local dropItems
-					if attackeeType.hasStumpForm then
-						attackee.health = math.max(attackeeType.stumpFormHealth, attackee.health - damage)
-						if attackee.health <= attackeeType.stumpFormHealth then
-							attackee.stump = true
+			elseif attackeeType.fruitPlant then
+				if attackee.stump then
+					if entityEquippedItemType and entityEquippedItemType.toolType == attackeeType.stumpRemovalToolTypeRequired or not attackeeType.stumpRemovalToolTypeRequired then
+						local damage = (entityType.attackDamage or 0) + (entityEquippedItemType.attackDamage or 0)
+						attackee.health = math.max(0, attackee.health - damage)
+					end
+				elseif attackee.seedling then
+					attackee.health = 0
+				else
+					if entityEquippedItemType and entityEquippedItemType.toolType == attackeeType.toolTypeRequired or not attackeeType.toolTypeRequired then
+						local damage = (entityType.attackDamage or 0) + (entityEquippedItemType.attackDamage or 0)
+						local dropItems
+						if attackeeType.hasStumpForm then
+							attackee.health = math.max(attackeeType.stumpFormHealth, attackee.health - damage)
+							if attackee.health <= attackeeType.stumpFormHealth then
+								attackee.stump = true
+								dropItems = true
+							end
+						else
+							attackee.health = math.max(0, attackee.health - damage)
 							dropItems = true
 						end
-					else
-						attackee.health = math.max(0, attackee.health - damage)
-						dropItems = true
-					end
-					if dropItems and attackeeType.mainFormDestructionItems then
-						local tileInventory = world.tileInventories[attackee.x][attackee.y]
-						for _, stack in ipairs(attackeeType.mainFormDestructionItems) do
-							util.inventory.give(tileInventory, stack.type, stack.count)
+						if dropItems and attackeeType.mainFormDestructionItems then
+							local tileInventory = world.tileInventories[attackee.x][attackee.y]
+							for _, stack in ipairs(attackeeType.mainFormDestructionItems) do
+								util.inventory.give(tileInventory, stack.type, stack.count)
+							end
 						end
 					end
 				end
@@ -61,6 +63,11 @@ local function tryAttack(world, player, entity, onEntityTile)
 				local tileInventory = world.tileInventories[attackee.x][attackee.y]
 				for _, stack in ipairs(attackeeType.destructionItems) do
 					util.inventory.give(tileInventory, stack.type, stack.count)
+				end
+				if attackee.inventory then
+					for _, stack in ipairs(attackee.inventory) do
+						assert(util.inventory.give(tileInventory, stack.type, stack.count), "Failed to empty entity inventory to ground")
+					end
 				end
 			end
 		end
