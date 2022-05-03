@@ -1,7 +1,7 @@
 {
 	"displayName": "Berry",
 	"size": 1,
-	"spawnsEntity": "berryBush",
+	"spawnsEntity": "bushBerry",
 	"entitySpawnAttributes": {
 		"seedling": true
 	},

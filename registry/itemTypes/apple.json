@@ -1,7 +1,7 @@
 {
 	"displayName": "Apple",
 	"size": 4,
-	"spawnsEntity": "appleTree",
+	"spawnsEntity": "treeApple",
 	"entitySpawnAttributes": {
 		"seedling": true
 	},

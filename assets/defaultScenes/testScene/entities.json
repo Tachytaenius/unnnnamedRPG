@@ -8,8 +8,8 @@
 	{"x": 2, "y": 4, "typeName": "chairWood", "direction": "up"},
 	{"x": 2, "y": 3, "typeName": "tableWood"},
 	{"x": 4, "y": 6, "typeName": "doorWood"},
-	{"x": 0, "y": 0, "typeName": "appleTree", "hasFruit": true, "fruitGrowthTimer": 0},
-	{"x": 1, "y": 0, "typeName": "berryBush", "hasFruit": true, "fruitGrowthTimer": 0},
+	{"x": 0, "y": 0, "typeName": "treeApple", "hasFruit": true, "fruitGrowthTimer": 0},
+	{"x": 1, "y": 0, "typeName": "bushBerry", "hasFruit": true, "fruitGrowthTimer": 0},
 	{"x": 5, "y": 2, "typeName": "silkwormBoxesWood"},
 	{"x": 5, "y": 3, "typeName": "rubbishBinIron"}
 ]
