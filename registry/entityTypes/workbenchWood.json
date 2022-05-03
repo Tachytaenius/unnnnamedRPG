@@ -6,6 +6,6 @@
 	"craftingDisplayName": "Workbench Crafting",
 	"easyRemove": true,
 	"destructionItems": [
-		{"type": "woodenWorkbench", "count": 1}
+		{"type": "workbenchWood", "count": 1}
 	]
 }

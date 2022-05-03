@@ -6,10 +6,10 @@
 	"inventoryCapacity": 30,
 	"producerProductFarm": true,
 	"producer": "silkworm",
-	"product": "silkThread",
+	"product": "threadSilk",
 	"productionTime": 600,
 	"easyRemove": true,
 	"destructionItems": [
-		{"type": "woodenSilkwormBoxes", "count": 1}
+		{"type": "silkwormBoxesWood", "count": 1}
 	]
 }

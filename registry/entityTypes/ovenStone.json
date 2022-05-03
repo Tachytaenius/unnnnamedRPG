@@ -6,6 +6,6 @@
 	"craftingDisplayName": "Cooking",
 	"easyRemove": true,
 	"destructionItems": [
-		{"type": "stoneOven", "count": 1}
+		{"type": "ovenStone", "count": 1}
 	]
 }

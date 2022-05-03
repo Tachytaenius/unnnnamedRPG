@@ -1,5 +1,5 @@
 {
 	"displayName": "Wooden Silkworm Boxes",
 	"size": 10,
-	"spawnsEntity": "woodenSilkwormBoxes"
+	"spawnsEntity": "silkwormBoxesWood"
 }

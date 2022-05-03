@@ -1,5 +1,5 @@
 {
 	"displayName": "Wooden Bed",
 	"size": 30,
-	"spawnsEntity": "woodenBed"
+	"spawnsEntity": "bedWood"
 }

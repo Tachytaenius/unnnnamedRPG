@@ -3,6 +3,6 @@
 	"layer": "furniture",
 	"easyRemove": true,
 	"destructionItems": [
-		{"type": "woodenDoor", "count": 1}
+		{"type": "doorWood", "count": 1}
 	]
 }

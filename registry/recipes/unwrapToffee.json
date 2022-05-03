@@ -1,7 +1,7 @@
 {
 	"class": "hands",
 	"reagents": [
-		{"type": "wrappedToffee", "count": 1}
+		{"type": "toffeeWrapped", "count": 1}
 	],
 	"products": [
 		{"type": "toffee", "count": 1},

@@ -4,6 +4,6 @@
 		{"type": "log", "count": 1}
 	],
 	"products": [
-		{"type": "woodenBed", "count": 1}
+		{"type": "doorWood", "count": 1}
 	]
 }

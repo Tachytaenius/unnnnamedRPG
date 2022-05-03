@@ -1,9 +1,9 @@
 {
-	"class": "workbench",
+	"class": "hands",
 	"reagents": [
 		{"type": "log", "count": 1}
 	],
 	"products": [
-		{"type": "woodenChest", "count": 1}
+		{"type": "workbenchWood", "count": 1}
 	]
 }

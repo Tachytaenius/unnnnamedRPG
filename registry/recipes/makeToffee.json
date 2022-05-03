@@ -1,10 +1,10 @@
 {
 	"class": "oven",
 	"reagents": [
-		{"type": "jarOfSugar", "count": 1}
+		{"type": "jarSugar", "count": 1}
 	],
 	"products": [
 		{"type": "toffee", "count": 2},
-		{"type": "emptyJar", "count": 1}
+		{"type": "jarEmpty", "count": 1}
 	]
 }

@@ -1,5 +1,5 @@
 {
 	"displayName": "Stone Oven",
 	"size": 30,
-	"spawnsEntity": "stoneOven"
+	"spawnsEntity": "ovenStone"
 }

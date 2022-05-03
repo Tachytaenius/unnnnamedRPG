@@ -7,6 +7,6 @@
 	"inventoryCapacity": 100,
 	"easyRemove": true,
 	"destructionItems": [
-		{"type": "ironRubbishBin", "count": 1}
+		{"type": "rubbishBinIron", "count": 1}
 	]
 }

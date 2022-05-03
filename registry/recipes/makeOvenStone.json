@@ -4,6 +4,6 @@
 		{"type": "cobble", "count": 3}
 	],
 	"products": [
-		{"type": "stoneOven", "count": 1}
+		{"type": "ovenStone", "count": 1}
 	]
 }

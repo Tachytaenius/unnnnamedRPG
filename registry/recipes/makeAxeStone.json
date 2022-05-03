@@ -5,6 +5,6 @@
 		{"type": "stick", "count": 1}
 	],
 	"products": [
-		{"type": "stoneAxe", "count": 1}
+		{"type": "axeStone", "count": 1}
 	]
 }

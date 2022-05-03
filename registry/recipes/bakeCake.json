@@ -3,11 +3,11 @@
 	"reagents": [
 		{"type": "wheat", "count": 1},
 		{"type": "egg", "count": 1},
-		{"type": "jarOfSugar", "count": 1},
-		{"type": "jarOfMilk", "count": 1}
+		{"type": "jarSugar", "count": 1},
+		{"type": "jarMilk", "count": 1}
 	],
 	"products": [
 		{"type": "cake", "count": 1},
-		{"type": "emptyJar", "count": 2}
+		{"type": "jarEmpty", "count": 2}
 	]
 }

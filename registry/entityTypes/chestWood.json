@@ -6,6 +6,6 @@
 	"inventoryCapacity": 200,
 	"easyRemove": true,
 	"destructionItems": [
-		{"type": "woodenChest", "count": 1}
+		{"type": "chestWood", "count": 1}
 	]
 }

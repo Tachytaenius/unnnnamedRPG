@@ -1,15 +1,15 @@
 [
 	{"x": 4, "y": 4, "player": true, "typeName": "playerCharacter", "direction": "down", "spriteColour": [0.3125, 0.1875, 0.1251], "inventory": {"capacity": 80, "items": [
-		{"type": "stoneAxe", "count": 1},
-		{"type": "stoneShovel", "count": 1}
+		{"type": "axeStone", "count": 1},
+		{"type": "shovelStone", "count": 1}
 	]}},
-	{"x": 2, "y": 2, "typeName": "woodenChair", "direction": "down"},
-	{"x": 3, "y": 3, "typeName": "woodenChair", "direction": "left"},
-	{"x": 2, "y": 4, "typeName": "woodenChair", "direction": "up"},
-	{"x": 2, "y": 3, "typeName": "woodenTable"},
-	{"x": 4, "y": 6, "typeName": "woodenDoor"},
+	{"x": 2, "y": 2, "typeName": "chairWood", "direction": "down"},
+	{"x": 3, "y": 3, "typeName": "chairWood", "direction": "left"},
+	{"x": 2, "y": 4, "typeName": "chairWood", "direction": "up"},
+	{"x": 2, "y": 3, "typeName": "tableWood"},
+	{"x": 4, "y": 6, "typeName": "doorWood"},
 	{"x": 0, "y": 0, "typeName": "appleTree", "hasFruit": true, "fruitGrowthTimer": 0},
 	{"x": 1, "y": 0, "typeName": "berryBush", "hasFruit": true, "fruitGrowthTimer": 0},
-	{"x": 5, "y": 2, "typeName": "woodenSilkwormBoxes"},
-	{"x": 5, "y": 3, "typeName": "ironRubbishBin"}
+	{"x": 5, "y": 2, "typeName": "silkwormBoxesWood"},
+	{"x": 5, "y": 3, "typeName": "rubbishBinIron"}
 ]

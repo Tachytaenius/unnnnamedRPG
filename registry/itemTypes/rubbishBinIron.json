@@ -1,5 +1,5 @@
 {
 	"displayName": "Iron Rubbish Bin",
 	"size": 30,
-	"spawnsEntity": "ironRubbishBin"
+	"spawnsEntity": "rubbishBinIron"
 }

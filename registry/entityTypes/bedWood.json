@@ -5,6 +5,6 @@
 	"canBeRotated": true,
 	"easyRemove": true,
 	"destructionItems": [
-		{"type": "woodenBed", "count": 1}
+		{"type": "bedWood", "count": 1}
 	]
 }

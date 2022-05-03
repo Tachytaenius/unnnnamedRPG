@@ -5,6 +5,6 @@
 		{"type": "sweetWrapper", "count": 1}
 	],
 	"products": [
-		{"type": "wrappedToffee", "count": 1}
+		{"type": "toffeeWrapped", "count": 1}
 	]
 }
