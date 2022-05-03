@@ -277,6 +277,12 @@ function ui.update(dt, world, player, commandDone)
 					for _, product in ipairs(recipe.products) do
 						util.inventory.give(window.inventoryToGiveTo, product.type, product.count * howManyResult)
 					end
+					-- update window.selectedItems
+					for item in pairs(window.selectedItems) do
+						if not util.getIndex(window.inventoryToGiveTo, item) then
+							window.selectedItems[item] = nil
+						end
+					end
 					assert(window == ui.focusedWindow, "not focused window")
 					ui.cancelFocused()
 				end
