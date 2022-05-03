@@ -19,11 +19,6 @@ local function tryAttack(world, player, entity, onEntityTile)
 				if entityEquippedItemType and entityEquippedItemType.toolType == attackeeType.toolTypeRequired or not attackeeType.toolTypeRequired then
 					attackee.health = 0 -- minor hack, destroy whether entity has health or not
 				end
-			elseif attackee.health then
-				if entityEquippedItemType and entityEquippedItemType.toolType == attackeeType.toolTypeRequired or not attackeeType.toolTypeRequired then
-					local damage = (entityType.attackDamage or 0) + (entityEquippedItemType and entityEquippedItemType.attackDamage or 0)
-					attackee.health = math.max(0, attackee.health - damage)
-				end
 			elseif attackeeType.fruitPlant then
 				if attackee.stump then
 					if entityEquippedItemType and entityEquippedItemType.toolType == attackeeType.stumpRemovalToolTypeRequired or not attackeeType.stumpRemovalToolTypeRequired then
@@ -53,6 +48,11 @@ local function tryAttack(world, player, entity, onEntityTile)
 							end
 						end
 					end
+				end
+			elseif attackee.health then -- generic
+				if entityEquippedItemType and entityEquippedItemType.toolType == attackeeType.toolTypeRequired or not attackeeType.toolTypeRequired then
+					local damage = (entityType.attackDamage or 0) + (entityEquippedItemType and entityEquippedItemType.attackDamage or 0)
+					attackee.health = math.max(0, attackee.health - damage)
 				end
 			end
 		end
