@@ -23,11 +23,13 @@ function inventory.getCount(inv, itemType)
 	return total
 end
 
-function inventory.give(inv, itemType, amountToGive)
+function inventory.give(inv, itemType, amountToGive, allowOverCapacity)
 	assert(amountToGive >= 0, "Can't give negative amount!")
 	local currentInventorySize = inventory.getCountSize(inv)
-	if currentInventorySize + amountToGive * registry.itemTypes[itemType].size > inv.capacity then
-		return false, "notEnoughSpace"
+	if not allowOverCapacity then
+		if currentInventorySize + amountToGive * registry.itemTypes[itemType].size > inv.capacity then
+			return false, "notEnoughSpace"
+		end
 	end
 	local stackToGiveTo
 	for _, stack in ipairs(inv) do
