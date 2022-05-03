@@ -131,6 +131,7 @@ local function updateEntities(world, player, dt, commandDone, saveFileName)
 				if entity.plantMaturityGrowthTimer <= 0 then
 					entity.seedling = nil
 					entity.plantMaturityGrowthTimer = nil
+					entity.fruitGrowthTimer = entityType.fruitGrowthTime
 				end
 			end
 		end
