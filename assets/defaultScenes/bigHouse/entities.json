@@ -16,10 +16,10 @@
 		{"type": "stick", "count": 1}
 	]}},
 	{"x": 19, "y": 6, "typeName": "woodenChest", "inventory": { "items": [
-		{"type": "jarOfMilk", "count": 10},
-		{"type": "jarOfSugar", "count": 10},
-		{"type": "wheat", "count": 10},
-		{"type": "egg", "count": 10}
+		{"type": "jarOfMilk", "count": 5},
+		{"type": "jarOfSugar", "count": 5},
+		{"type": "wheat", "count": 5},
+		{"type": "egg", "count": 5}
 	]}},
 	{"x": 19, "y": 7, "typeName": "woodenChest"},
 	{"x": 17, "y": 7, "typeName": "woodenChest"},
