@@ -1,0 +1,9 @@
+{
+	"class": "workbench",
+	"reagents": [
+		{"type": "paper", "count": 1}
+	],
+	"products": [
+		{"type": "sweetWrapper", "count": 4}
+	]
+}
