@@ -14,7 +14,7 @@ local contentCanvas
 local colouriseSpriteShader
 
 local world, player, paused, saveFileName, saveLoaded, fadeTime, fadeTimer, fadeMiddleFunction
-local commandDone, commandDone, commandDone
+local commandDone
 
 do -- load util
 	-- TODO: directories --> tables
