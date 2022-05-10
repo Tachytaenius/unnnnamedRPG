@@ -1,3 +1,3 @@
 function love.conf(t)
-	t.window = nil -- do this in main
+	t.window = nil -- Do this in main
 end
