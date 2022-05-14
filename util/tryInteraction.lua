@@ -25,7 +25,7 @@ local function tryInteraction(world, player, entity, onEntityTile)
 		elseif interacteeType.fruitPlant then
 			if interactee.hasFruit then
 				local amountToGet = interacteeType.fruitCount
-				local success, error = util.inventory.give(entity.inventory, interacteeType.fruitType, amountToGet)
+				local success, error = util.inventory.give(entity.inventory, interacteeType.fruitType, interacteeType.fruitMetadata, amountToGet)
 				if success then
 					interactee.hasFruit = false
 					interactee.fruitGrowthTimer = interacteeType.fruitGrowthTime

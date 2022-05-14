@@ -44,7 +44,7 @@ local function tryAttack(world, player, entity, onEntityTile)
 						if dropItems and attackeeType.mainFormDestructionItems then
 							local tileInventory = world.tileInventories[attackee.x][attackee.y]
 							for _, stack in ipairs(attackeeType.mainFormDestructionItems) do
-								util.inventory.give(tileInventory, stack.type, stack.count)
+								util.inventory.give(tileInventory, stack.type, stack.metadata, stack.count)
 							end
 						end
 					end
@@ -62,11 +62,11 @@ local function tryAttack(world, player, entity, onEntityTile)
 			if attackeeType.destructionItems then
 				local tileInventory = world.tileInventories[attackee.x][attackee.y]
 				for _, stack in ipairs(attackeeType.destructionItems) do
-					util.inventory.give(tileInventory, stack.type, stack.count, true)
+					util.inventory.give(tileInventory, stack.type, stack.metadata, stack.count, true)
 				end
 				if attackee.inventory then
 					for _, stack in ipairs(attackee.inventory) do
-						util.inventory.give(tileInventory, stack.type, stack.count, true)
+						util.inventory.give(tileInventory, stack.type, stack.metadata, stack.count, true)
 					end
 				end
 			end

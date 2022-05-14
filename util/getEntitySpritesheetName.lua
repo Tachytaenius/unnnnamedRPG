@@ -11,9 +11,9 @@ local function getEntitySpritesheetName(entity)
 		return entity.seedling and entityAsset.info.seedlingSpritesheetName or entity.stump and entityAsset.info.stumpSpritesheetName or entity.hasFruit and entityAsset.info.withFruitSpritesheetName or entityAsset.info.withoutFruitSpritesheetName
 	elseif entityType.producerProductFarm then
 		local spritesheetNameTable
-		local hasProducer = entity.inventory and util.inventory.getCount(entity.inventory, entityType.producer) > 0
+		local hasProducer = entity.inventory and util.inventory.getCount(entity.inventory, entityType.producer, entityType.producerMetadata) > 0
 		local spritesheetNameTable = hasProducer and entityAsset.info.withProducerSpritesheetNames or entityAsset.info.withoutProducerSpritesheetNames
-		local hasProduct = entity.inventory and util.inventory.getCount(entity.inventory, entityType.product) > 0
+		local hasProduct = entity.inventory and util.inventory.getCount(entity.inventory, entityType.product, entityType.productMetadata) > 0
 		return hasProduct and spritesheetNameTable.withProduct or spritesheetNameTable.withoutProduct
 	end
 	return entityAsset.info.defaultSpritesheetName

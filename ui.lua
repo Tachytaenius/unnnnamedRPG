@@ -86,7 +86,7 @@ function ui.showTransferringInventories(inventoryA, inventoryB, displayNameA, di
 				if selectedStack == self.items.equippedItem and selectedStack.count <= 0 then
 					self.items.equippedItem = nil
 				end
-				util.inventory.give(self.otherItems, selectedStack.type, amountToTransfer)
+				util.inventory.give(self.otherItems, selectedStack.type, selectedStack.metadata, amountToTransfer)
 			else
 				ui.textBoxWrapper("Not enough of item to transfer")
 			end
@@ -275,7 +275,7 @@ function ui.update(dt, world, player, commandDone)
 					end
 					-- now give
 					for _, product in ipairs(recipe.products) do
-						util.inventory.give(window.inventoryToGiveTo, product.type, product.count * howManyResult)
+						util.inventory.give(window.inventoryToGiveTo, product.type, product.metadata, product.count * howManyResult)
 					end
 					-- update window.selectedItems
 					for item in pairs(window.selectedItems) do
