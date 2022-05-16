@@ -7,6 +7,7 @@ consts.contentWidth = 384
 consts.contentHeight = 256
 
 consts.tileSize = 16
+consts.clothingItemType = "kimono"
 
 consts.startingScene = "bigHouse"
 consts.tileInventoryCapacity = 40 -- how much dropped item can fit on one tile?

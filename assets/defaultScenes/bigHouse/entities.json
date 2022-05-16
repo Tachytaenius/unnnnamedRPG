@@ -21,7 +21,11 @@
 		{"type": "wheat", "count": 5},
 		{"type": "egg", "count": 5}
 	]}},
-	{"x": 19, "y": 7, "typeName": "chestWood"},
+	{"x": 19, "y": 7, "typeName": "chestWood", "inventory": { "items": [
+		{"type": "kimono", "count": 1, "metadata": { "colour": [
+			0.5, 0.5, 0.5
+		]}}
+	]}},
 	{"x": 17, "y": 7, "typeName": "chestWood"},
 	{"x": 17, "y": 6, "typeName": "chestWood"},
 	{"x": 15, "y": 9, "typeName": "rubbishBinIron"},

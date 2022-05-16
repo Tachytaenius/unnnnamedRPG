@@ -1,4 +1,5 @@
 local util = require("util")
+local consts = require("consts")
 local ui = require("ui")
 
 local registry = require("registry")
@@ -44,10 +45,19 @@ local function tryInteraction(world, player, entity, onEntityTile)
 		end
 	end
 	if #interactees <= 0 then
-		if not util.checkCollision(world, interactionTileX, interactionTileY) then
-			local equippedItem = entity.inventory and entity.inventory.equippedItem
+		local equippedItem = entity.inventory and entity.inventory.equippedItem
+		local equippedItemType = equippedItem and registry.itemTypes[equippedItem.type]
+		if equippedItemType and equippedItemType.clothing then
+			util.inventory.takeFromStack(entity.inventory, equippedItem, 1)
+			local curSpriteColour = entity.spriteColour
+			entity.spriteColour = {
+				equippedItem.metadata.colour[1],
+				equippedItem.metadata.colour[2],
+				equippedItem.metadata.colour[3]
+			}
+			util.inventory.give(entity.inventory, consts.clothingItemType, {colour = curSpriteColour}, 1) -- TODO: Different clothing items?
+		elseif not util.checkCollision(world, interactionTileX, interactionTileY) then
 			if equippedItem then
-				local equippedItemType = registry.itemTypes[equippedItem.type]
 				local entityTypeNameToCreate = equippedItemType.spawnsEntity
 				if entityTypeNameToCreate then
 					local ok = false
