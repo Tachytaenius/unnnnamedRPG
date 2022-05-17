@@ -1,0 +1,11 @@
+{
+	"solid": true,
+	"layer": "furniture",
+	"crafting": true,
+	"craftingRecipeClasses": ["loom"],
+	"craftingDisplayName": "Loom Crafting",
+	"easyRemove": true,
+	"destructionItems": [
+		{"type": "loomWood", "count": 1}
+	]
+}

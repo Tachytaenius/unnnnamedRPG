@@ -1,0 +1,9 @@
+{
+	"class": "workbench",
+	"reagents": [
+		{"type": "log", "count": 1}
+	],
+	"products": [
+		{"type": "loomWood", "count": 1}
+	]
+}

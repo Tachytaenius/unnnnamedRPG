@@ -1,0 +1,9 @@
+{
+	"class": "loom",
+	"reagents": [
+		{"type": "threadSilk", "count": 1}
+	],
+	"products": [
+		{"type": "clothSilk", "count": 1}
+	]
+}
