@@ -419,16 +419,21 @@ function ui.draw()
 			-- do items
 			local thisViewOffset = 1
 			for stackIndex = 1 + window.viewOffset, math.min(#window.items, 1 + window.viewOffset + window.extraSlotsOffset) do
+				local stack = window.items[stackIndex]
 				-- check for cursor
 				local x
 				if stackIndex == window.cursor then
 					x = assets.inventory.cursor:getWidth()
+					love.graphics.push("all")
+					if stack.metadata and stack.metadata.colour then
+						uiSetColor(window, stack.metadata.colour)
+					end
 					love.graphics.draw(assets.inventory.cursor, 0, 8 + thisViewOffset * assets.font.font:getHeight())
+					love.graphics.pop()
 				else
 					-- x = 0
 					x = assets.inventory.cursor:getWidth()
 				end
-				local stack = window.items[stackIndex]
 				local equippedIndicator = stack == window.items.equippedItem and "(E) " or ""
 				local craftingSelectedIndicator = window.selectedItems and window.selectedItems[stack] and "(C) " or ""
 				local itemName = registry.itemTypes[stack.type].displayName
