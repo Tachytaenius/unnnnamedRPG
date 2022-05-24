@@ -1,0 +1,11 @@
+{
+	"solid": true,
+	"layer": "furniture",
+	"crafting": true,
+	"craftingRecipeClasses": ["clothiers"],
+	"craftingDisplayName": "Clothier's Crafting",
+	"easyRemove": true,
+	"destructionItems": [
+		{"type": "clothiersWorkshopWood", "count": 1}
+	]
+}

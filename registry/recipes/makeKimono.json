@@ -1,0 +1,9 @@
+{
+	"class": "clothiers",
+	"reagents": [
+		{"type": "clothSilk", "count": 1}
+	],
+	"products": [
+		{"type": "kimono", "count": 1, "metadata": {"colour": [1, 1, 1]}}
+	]
+}
