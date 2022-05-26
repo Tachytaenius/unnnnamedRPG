@@ -62,8 +62,8 @@ function ui.inventory(inventory, displayName, selectionFunction)
 	window.cursor = 1
 	window.extraSlotsOffset = 8
 	window.viewOffset = 0
-	window.x, window.y = 80, 48
-	window.width, window.height = 208, 176
+	window.x, window.y = 64, 48
+	window.width, window.height = 240, 176
 	return window
 end
 
