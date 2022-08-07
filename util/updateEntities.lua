@@ -54,19 +54,47 @@ local function updateEntities(world, player, dt, commandDone, saveFileName)
 				if left and right then
 					left, right = false, false
 				end
-				local vertical = up or down
-				local horizontal = left or right
-				if vertical and horizontal then
-					if not entity.inputPriority then
-						entity.inputPriority = "vertical"
-					end
-					if entity.inputPriority == "vertical" then
-						left, right = false, false
-					else
-						up, down = false, false
-					end
+				if not up and not down and not left and not right then
+					entity.inputPriority = nil
+					entity.prevUp, entity.prevRight, entity.prevDown, entity.prevLeft = up, right, down, left
 				else
-					entity.inputPriority = vertical and "horizontal" or "vertical"
+					if
+						-- just lost priority input?
+						entity.inputPriority == "up" and entity.prevUp and not up or
+						entity.inputPriority == "down" and entity.prevDown and not down or
+						entity.inputPriority == "left" and entity.prevLeft and not left or
+						entity.inputPriority == "right" and entity.prevRight and not right
+					then
+						if up then
+							entity.inputPriority = "up"
+						elseif right then
+							entity.inputPriority = "right"
+						elseif down then
+							entity.inputPriority = "down"
+						elseif left then
+							entity.inputPriority = "left"
+						end
+					end
+					if not entity.prevUp and up then
+						entity.inputPriority = "up"
+					elseif not entity.prevRight and right then
+						entity.inputPriority = "right"
+					elseif not entity.prevDown and down then
+						entity.inputPriority = "down"
+					elseif not entity.prevLeft and left then
+						entity.inputPriority = "left"
+					end
+					entity.prevUp, entity.prevRight, entity.prevDown, entity.prevLeft = up, right, down, left
+					-- if you move the above line after this if statement you can automatically stair-walk when holding diagonals
+					if entity.inputPriority == "up" then
+						left, right, down = false, false, false
+					elseif entity.inputPriority == "right" then
+						left, up, down = false, false, false
+					elseif entity.inputPriority == "down" then
+						left, right, up = false, false, false
+					elseif entity.inputPriority == "left" then
+						up, right, down = false, false, false
+					end
 				end
 			end
 			if up then
