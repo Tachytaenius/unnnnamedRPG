@@ -55,10 +55,17 @@ local function updateEntities(world, player, dt, commandDone, saveFileName)
 					left, right = false, false
 				end
 				if not up and not down and not left and not right then
-					entity.inputPriority = nil
 					entity.prevUp, entity.prevRight, entity.prevDown, entity.prevLeft = up, right, down, left
 				else
-					if
+					if not entity.prevUp and up then
+						entity.inputPriority = "up"
+					elseif not entity.prevRight and right then
+						entity.inputPriority = "right"
+					elseif not entity.prevDown and down then
+						entity.inputPriority = "down"
+					elseif not entity.prevLeft and left then
+						entity.inputPriority = "left"
+					elseif
 						-- just lost priority input?
 						entity.inputPriority == "up" and entity.prevUp and not up or
 						entity.inputPriority == "down" and entity.prevDown and not down or
@@ -74,15 +81,6 @@ local function updateEntities(world, player, dt, commandDone, saveFileName)
 						elseif left then
 							entity.inputPriority = "left"
 						end
-					end
-					if not entity.prevUp and up then
-						entity.inputPriority = "up"
-					elseif not entity.prevRight and right then
-						entity.inputPriority = "right"
-					elseif not entity.prevDown and down then
-						entity.inputPriority = "down"
-					elseif not entity.prevLeft and left then
-						entity.inputPriority = "left"
 					end
 					entity.prevUp, entity.prevRight, entity.prevDown, entity.prevLeft = up, right, down, left
 					-- if you move the above line after this if statement you can automatically stair-walk when holding diagonals
