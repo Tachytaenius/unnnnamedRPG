@@ -1,0 +1,14 @@
+{
+	"class": "oven",
+	"reagents": [
+		{"type": "wheat", "count": 1},
+		{"type": "egg", "count": 1},
+		{"type": "jarSugar", "count": 1},
+		{"type": "jarMilk", "count": 1},
+		{"type": "berry", "count": 5}
+	],
+	"products": [
+		{"type": "cakeBerries", "count": 1},
+		{"type": "jarEmpty", "count": 2}
+	]
+}
